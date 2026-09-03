@@ -1,0 +1,3004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michel's Course — Business English, Logistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0A0F;
+    --surface: #17161F;
+    --surface-2: #201F2B;
+    --line: rgba(255,255,255,0.1);
+    --text: #F3F1F7;
+    --muted: #9B98AC;
+
+    --navy: #17161F;
+    --navy-2: #201F2B;
+    --rust: #FF8B7A;
+    --rust-dark: #E8654F;
+    --kraft: #FFD166;
+    --paper: #F3F1F7;
+    --paper-2: #201F2B;
+    --steel: #9B98AC;
+    --ink: #F3F1F7;
+    --ok: #4ADE80;
+    --teal: #5EEAD4;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(94,234,212,0.06), transparent 40%),
+      radial-gradient(circle at 85% 15%, rgba(255,139,122,0.05), transparent 45%);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 110px 0;
+  }
+
+  /* SAVE BAR */
+  .save-bar{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    background: #101017;
+    border-top: 1px solid var(--line);
+    padding: 12px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 14px;
+    z-index: 50;
+    flex-wrap: wrap;
+  }
+  .save-btn{
+    background: var(--ok);
+    color: #0B1F12;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .save-btn:hover{ opacity: 0.9; }
+  .clear-btn{
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .clear-btn:hover{ border-color: var(--rust); color: var(--rust); }
+  .save-status{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 160px;
+  }
+  .score-badge{
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .score-badge.score-ok{ background: rgba(74,222,128,0.15); color: var(--ok); border: 1px solid rgba(74,222,128,0.35); }
+  .score-badge.score-mid{ background: rgba(255,209,102,0.15); color: var(--kraft); border: 1px solid rgba(255,209,102,0.35); }
+  .score-badge.score-low{ background: rgba(255,139,122,0.15); color: var(--rust); border: 1px solid rgba(255,139,122,0.35); }
+
+  #access-gate{
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .gate-card{
+    max-width: 380px;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .gate-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: var(--teal);
+    margin-bottom: 14px;
+  }
+  .gate-title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    margin: 0 0 8px;
+  }
+  .gate-desc{
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0 0 22px;
+    line-height: 1.5;
+  }
+  .gate-input{
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    margin-bottom: 12px;
+  }
+  .gate-input:focus{ outline: none; border-color: var(--teal); }
+  .gate-btn{
+    width: 100%;
+    background: var(--teal);
+    color: #052821;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .gate-btn:hover{ opacity: 0.9; }
+  .gate-error{
+    color: var(--rust);
+    font-size: 12.5px;
+    margin-top: 10px;
+    display: none;
+  }
+  .gate-error.show{ display: block; }
+
+  .wrap{ max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  header.hero{
+    padding: 56px 24px 44px;
+    color: var(--text);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-inner{
+    max-width: 880px;
+    margin: 0 auto;
+    border-bottom: 2px dashed var(--line);
+    padding-bottom: 32px;
+  }
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before{
+    content:'';
+    width: 22px; height: 1px;
+    background: var(--teal);
+  }
+  h1{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4.4vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .hero-desc{
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(243,241,247,0.78);
+    max-width: 620px;
+    margin: 0;
+  }
+  .stamp{
+    position: absolute;
+    top: 44px; right: 24px;
+    border: 2px solid var(--rust);
+    color: var(--rust);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 3px;
+    transform: rotate(6deg);
+    opacity: 0.9;
+  }
+
+  /* SECTION LABELS */
+  .section{ padding: 48px 0 8px; }
+  .section-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom: 28px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--teal);
+    font-size: 13px;
+    background: rgba(94,234,212,0.12);
+    border: 1px solid rgba(94,234,212,0.35);
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .section-title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text);
+    margin:0;
+  }
+  .section-sub{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin: -18px 0 26px 0;
+  }
+
+  /* GLOSSARY — friendly cards */
+  .tag-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+  }
+  .tag{
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 18px 18px 18px 34px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .tag:hover{ transform: translateY(-3px); border-color: var(--teal); }
+  .tag::before{
+    content:'';
+    position:absolute;
+    left: 14px; top: 18px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 2px var(--surface), 0 0 0 1px var(--line);
+  }
+  .tag-code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--rust);
+    letter-spacing: 0.08em;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .tag-term{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    margin: 0 0 4px;
+  }
+  .tag-hint{
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .tag-def{
+    display:none;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(243,241,247,0.8);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .tag.open .tag-def{ display:block; }
+  .tag.open .tag-hint{ display:none; }
+  .tag.open{ background: var(--surface-2); border-color: var(--teal); }
+
+  /* QUESTIONS — manifest checklist */
+  .manifest{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .q-item{
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+  .q-item:last-child{ border-bottom: none; }
+  .q-num{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--kraft);
+    font-size: 13px;
+    padding: 18px 0;
+    text-align: center;
+    border-right: 1px dashed var(--line);
+  }
+  .q-body{ padding: 16px 20px; }
+  .q-text{
+    color: var(--text);
+    font-size: 15.5px;
+    line-height: 1.55;
+    margin: 0 0 10px;
+  }
+  .q-text em{ color: var(--kraft); font-style: normal; font-weight: 600; }
+  .q-toggle{
+    background: none;
+    border: 1px solid var(--line);
+    color: rgba(243,241,247,0.7);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .q-toggle:hover{ border-color: var(--teal); color: var(--teal); }
+  .q-actions{ display:flex; gap: 8px; flex-wrap: wrap; }
+  .key-toggle{
+    background: none;
+    border: 1px solid rgba(74,222,128,0.4);
+    color: #8FE3AC;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .key-toggle:hover{ border-color: var(--ok); color: var(--ok); }
+  .answer-key{
+    display:none;
+    margin-top: 10px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #C6F2D3;
+  }
+  .answer-key::before{
+    content: 'TEACHER KEY';
+    display:block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--ok);
+    margin-bottom: 5px;
+  }
+  .answer-key.show{ display:block; }
+  textarea.notes{
+    display:none;
+    width: 100%;
+    margin-top: 10px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px;
+    resize: vertical;
+    min-height: 56px;
+  }
+  textarea.notes:focus{ outline: none; border-color: var(--teal); }
+  textarea.notes.show{ display:block; }
+
+  /* ARTICLE — comfortable long-form reading */
+  .article{
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 8px;
+    border: 1px solid var(--line);
+  }
+  .article-inner{
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 28px 48px;
+  }
+  .article-kicker{
+    display:flex; align-items:center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 14px;
+  }
+  .article-kicker::after{
+    content:'';
+    flex:1;
+    height: 1px;
+    background: var(--line);
+  }
+  .article h3.article-title{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(24px, 3.4vw, 32px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: var(--text);
+  }
+  .byline{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 30px;
+  }
+  .article-body p{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: rgba(243,241,247,0.88);
+    margin: 0 0 22px;
+  }
+  .para{
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .letter-badge{
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--teal);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    display:flex; align-items:center; justify-content:center;
+    margin-top: 3px;
+    border: 1px solid var(--line);
+  }
+  .article-body q.pull{
+    color: var(--rust);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .subsection{ margin-bottom: 36px; }
+  .subsection:last-child{ margin-bottom: 0; }
+  .subsection-head{
+    display:flex; align-items:center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .block-badge{
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--kraft);
+    color: #1A1400;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .subsection-title{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    margin: 0;
+  }
+  .subsection-instr{
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 14px 38px;
+  }
+
+  /* BRIDGE — clue cards linking glossary to the article */
+  .clue-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .clue{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .clue:hover{ border-color: var(--kraft); }
+  .clue-para{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #1A1400;
+    background: var(--kraft);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+  .clue-text{
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(243,241,247,0.85);
+    margin: 0 0 10px;
+  }
+  .clue-reveal{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--kraft);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .clue-answer{
+    display:none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--rust);
+  }
+  .clue.open .clue-answer{ display:block; }
+  .clue.open .clue-reveal{ display:none; }
+  .clue.open{ background: rgba(255,209,102,0.1); border-color: var(--kraft); }
+
+  /* WORDS OFTEN CONFUSED + WORD PARTNERSHIPS */
+  .exercise-card{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .exercise-card:last-child{ margin-bottom: 0; }
+  .exercise-instr{
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 0 0 16px;
+  }
+  .example-sentence{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal;
+    font-size: 15.5px;
+    color: var(--kraft);
+    line-height: 1.6;
+    margin: 0 0 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .example-sentence b{ font-weight: 800; color: var(--text); }
+
+  .confuse-row{
+    display:flex; align-items:center; gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .confuse-row:last-child{ margin-bottom: 0; }
+  .confuse-word{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    width: 78px;
+    flex: 0 0 auto;
+  }
+  .choice-btn{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    color: rgba(243,241,247,0.85);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    text-align: left;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1 1 260px;
+    transition: all 0.15s ease;
+  }
+  .choice-btn:hover{ border-color: var(--kraft); }
+  .choice-btn.selected{ border-color: var(--kraft); background: rgba(255,209,102,0.12); }
+  .choice-btn.correct{ border-color: var(--ok); background: rgba(74,222,128,0.15); color: #C6F2D3; }
+  .choice-btn.incorrect{ border-color: var(--rust); background: rgba(255,139,122,0.15); color: #FFD4CB; }
+
+  .fill-row{
+    display:flex; align-items:baseline; gap: 10px;
+    margin-bottom: 14px;
+    font-size: 14.5px;
+    color: rgba(243,241,247,0.85);
+    line-height: 1.6;
+  }
+  .fill-row:last-child{ margin-bottom: 0; }
+  .fill-num{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--kraft);
+    font-size: 12px;
+    flex: 0 0 16px;
+  }
+  select.inline-select{
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 3px 8px;
+  }
+  select.inline-select.correct{ border-color: var(--ok); }
+  select.inline-select.incorrect{ border-color: var(--rust); }
+
+  .match-grid{ display:flex; flex-direction:column; gap: 10px; }
+  .match-row{
+    display:flex; align-items:center; gap: 12px;
+    font-size: 14.5px;
+    color: rgba(243,241,247,0.85);
+  }
+  .match-word{
+    width: 110px;
+    flex: 0 0 auto;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .match-arrow{ color: var(--kraft); font-size: 13px; }
+
+  .check-btn{
+    background: var(--teal);
+    color: #052821;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 9px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .check-btn:hover{ opacity: 0.88; }
+
+  footer{
+    text-align:center;
+    padding: 40px 24px 0;
+    color: rgba(243,241,247,0.3);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 520px){
+    .stamp{ display:none; }
+    header.hero{ padding: 40px 20px 30px; }
+  }
+
+  .menu-wrap{ max-width: 780px; margin: 0 auto; padding: 90px 24px 60px; }
+  .menu-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--teal);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom: 18px;
+  }
+  .menu-eyebrow::before{ content:''; width:22px; height:1px; background: var(--teal); }
+  .menu-title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4.4vw, 42px);
+    line-height: 1.1;
+    margin: 0 0 12px;
+  }
+  .menu-desc{
+    font-size: 15.5px;
+    color: rgba(243,241,247,0.7);
+    max-width: 520px;
+    margin: 0 0 48px;
+  }
+  .unit-grid{ display:flex; flex-direction:column; gap: 18px; }
+  .unit-card{
+    display:flex;
+    align-items:center;
+    gap: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+  .unit-card:hover{ transform: translateY(-2px); border-color: var(--teal); }
+  .unit-num{
+    flex: 0 0 auto;
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: var(--surface-2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--teal);
+    border: 1px solid var(--line);
+  }
+  .unit-body{ flex: 1; }
+  .unit-title-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .unit-title{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    margin: 0;
+  }
+  .unit-status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .unit-status.done{ background: rgba(74,222,128,0.15); color: var(--ok); border: 1px solid rgba(74,222,128,0.35); }
+  .unit-status.progress{ background: rgba(255,209,102,0.15); color: var(--kraft); border: 1px solid rgba(255,209,102,0.35); }
+  .unit-desc{
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .unit-arrow{
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-size: 20px;
+  }
+  .unit-card:hover .unit-arrow{ color: var(--teal); }
+
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  .back-bar{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 20px 24px 0;
+  }
+  .back-btn{
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-btn:hover{ border-color: var(--teal); color: var(--teal); }
+</style>
+</head>
+
+<body>
+
+<script>
+  function renderScore(btn, correct, total){
+    let badge = btn.nextElementSibling;
+    if(!badge || !badge.classList || !badge.classList.contains('score-badge')){
+      badge = document.createElement('span');
+      badge.className = 'score-badge';
+      btn.insertAdjacentElement('afterend', badge);
+    }
+    badge.textContent = `Score: ${correct}/${total}`;
+    badge.classList.remove('score-ok','score-mid','score-low');
+    const ratio = total ? correct/total : 0;
+    badge.classList.add(ratio === 1 ? 'score-ok' : ratio >= 0.5 ? 'score-mid' : 'score-low');
+  }
+  function debounce(fn, wait){
+    let t;
+    return function(...args){
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+</script>
+
+<!-- ============ ACCESS GATE ============ -->
+<div id="access-gate">
+  <div class="gate-card">
+    <div class="gate-eyebrow">Business English — Logistics</div>
+    <h2 class="gate-title">Michel's course</h2>
+    <p class="gate-desc">Enter your email to continue.</p>
+    <input type="email" id="gate-email" class="gate-input" placeholder="you@company.com" autocomplete="email">
+    <button type="button" class="gate-btn" id="gate-submit">Continue</button>
+    <p class="gate-error" id="gate-error">That email doesn't match. Please check and try again.</p>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const ALLOWED_EMAIL = 'michel.rodrigues@daimlertruck.com';
+    const gate = document.getElementById('access-gate');
+    const input = document.getElementById('gate-email');
+    const submitBtn = document.getElementById('gate-submit');
+    const errorEl = document.getElementById('gate-error');
+
+    function tryUnlock(){
+      const val = input.value.trim().toLowerCase();
+      if(val === ALLOWED_EMAIL){
+        try{ localStorage.setItem('mc-access', 'granted'); }catch(err){}
+        gate.style.display = 'none';
+      }else{
+        errorEl.classList.add('show');
+      }
+    }
+
+    try{
+      if(localStorage.getItem('mc-access') === 'granted'){
+        gate.style.display = 'none';
+      }
+    }catch(err){}
+
+    submitBtn.addEventListener('click', tryUnlock);
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') tryUnlock();
+    });
+  })();
+</script>
+
+<!-- ============ MENU ============ -->
+<div id="view-menu" class="view active">
+  <div class="menu-wrap">
+    <div class="menu-eyebrow">Business English — Logistics</div>
+    <h1 class="menu-title">Michel's course</h1>
+    <p class="menu-desc">Pick a unit to open. Each one keeps its own glossary, article, exercises and saved answers.</p>
+
+    <div class="unit-grid">
+      <button class="unit-card" type="button" onclick="showView('view-unit1')">
+        <div class="unit-num">01</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">The importance of an efficient supply chain</p>
+            <span class="unit-status done">Finished</span>
+          </div>
+          <p class="unit-desc">Glossary, FT article, comprehension, word search &amp; word partnerships.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit2')">
+        <div class="unit-num">02</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Using the supply chain to increase sales</p>
+            <span class="unit-status progress">In progress</span>
+          </div>
+          <p class="unit-desc">How Procter &amp; Gamble uses its supply chain to grow sales, not just cut costs.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit3')">
+        <div class="unit-num">03</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Supply chain vocabulary in practice</p>
+            <span class="unit-status progress">In progress</span>
+          </div>
+          <p class="unit-desc">Six standalone exercises to review key supply-chain vocabulary and terms.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit4')">
+        <div class="unit-num">04</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">The stages of the supply chain</p>
+            <span class="unit-status progress">In progress</span>
+          </div>
+          <p class="unit-desc">Video lesson (Apple &amp; the iPhone) covering the five stages of a supply chain.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ UNIT 1 ============ -->
+<div id="view-unit1" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit · Business English — Logistics</div>
+    <h1>The importance of an efficient supply chain</h1>
+    <p class="hero-desc">This unit explains why an efficient supply chain is important for the success and profitability of a company.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Glossary</h2>
+    </div>
+    <p class="section-sub">Click each tag to reveal the definition. Try defining the term yourself before checking.</p>
+
+    <div class="tag-grid" id="u1-glossary"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Before You Read — Discuss</h2>
+    </div>
+    <p class="section-sub">Talk through each question out loud. Use "Notes" only if you want to jot down key vocabulary.</p>
+
+    <div class="manifest" id="u1-questions"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Reading</h2>
+    </div>
+    <p class="section-sub">Full article, section by section (A–G).</p>
+
+    <div class="article">
+      <div class="article-inner">
+        <div class="article-kicker">Financial Times</div>
+        <h3 class="article-title">Control of the supply chain turns critical</h3>
+        <p class="byline">by Stephen Pritchard</p>
+
+        <div class="article-body">
+          <div class="para">
+            <span class="letter-badge">A</span>
+            <p>An efficient supply chain is a prize worth working for. According to the consultancy firm Accenture, "supply chain leadership" can increase a company's market value by between 7 and 26 per cent above the industry average. But for a business, even competing for that prize demands a significant investment in resources. In sectors such as consumer goods and retailing, established companies have already achieved the easiest supply-chain efficiencies. Making further improvements is much more difficult.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">B</span>
+            <p>Nonetheless, an efficient supply chain is a must for a widening range of businesses. Fashion, hi-tech and grocery retailers realised early on the importance of ensuring the right stock reached the right store at the right time. No one wants a warehouse full of summer dresses at the beginning of autumn, or indeed shelves of last season's mobile phones in the weeks before Christmas. But the supply chain is now moving up the agenda in slower-moving sectors, such as heavy manufacturing.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">C</span>
+            <p>Effective supply-chain management is the only way to make efficient use of global sourcing strategies, and especially the huge manufacturing capacity of China and south-east Asia. Although globalisation has reduced production costs in a wide range of sectors, the trend to source components or even finished goods from China and elsewhere has made the supply chain manager's task far harder. <q class="pull">"Our internal systems handle more than 700 suppliers,"</q> says Christian Verstraete, worldwide supply-chain expert at Hewlett-Packard. "We have to be able to exchange messages not just with them, but with their suppliers."</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">D</span>
+            <p>Supply-chain managers in many sectors are looking for greater visibility of what is happening in their supply chains and faster access to more accurate data. This means that if there is an unexpected event, such as storms affecting shipping or a production shortfall, companies can divert stocks or bring in alternative suppliers. "Companies are not just asking suppliers why there is a problem with an order," says Sanjiv Sidhu, President of i2, a vendor of management software for supply chains. <q class="pull">"They are asking: 'When did you first know, and why did you surprise me?'"</q></p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">E</span>
+            <p>In sectors such as retail, supply-chain problems lead to "stock-outs" or empty shelves, which send customers elsewhere. In heavy or complex manufacturing, supply-chain problems can lead to cancelled orders running into billions of dollars, or severe penalties for late delivery.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">F</span>
+            <p>As manufacturers move away from vertically integrated production, where all steps of the production process are controlled in-house, the supply chain suddenly becomes critical. "In aerospace and defence, we are 10 years behind the hi-tech or even automotive sectors, and how we improve the performance of our supply chain is quite a challenge," explains Bill Black, Chief Quality Officer at aerospace manufacturer EADS. <q class="pull">"The cost of running our supply-chain logistics is minor, set against the $100m cost of an aircraft. But the cost of failure is enormous."</q></p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">G</span>
+            <p>"About 80 per cent of the cost of an aircraft is accounted for by suppliers and partners," says Black, making EADS "a co-ordinator of complex products". <q class="pull">"I need to know if an event can affect our master schedule, and that means that I need to know what is happening, not just with my tier-one suppliers, but with tier-three, four or five suppliers as well."</q></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Spot It in the Article</h2>
+    </div>
+    <p class="section-sub">Each clue points to a word or phrase from the text. Find it, then click to check.</p>
+
+    <div class="clue-grid" id="u1-bridge"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Reading Comprehension</h2>
+    </div>
+    <p class="section-sub">Go back to the article to answer. Discuss out loud; use "Notes" if you want to record your answer.</p>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">A</span>
+        <h3 class="subsection-title">Understanding the main points</h3>
+      </div>
+      <p class="subsection-instr">Read the article and answer these questions.</p>
+      <div class="manifest" id="u1-mainpoints"></div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">B</span>
+        <h3 class="subsection-title">Understanding details</h3>
+      </div>
+      <p class="subsection-instr">Read the article again and answer these questions.</p>
+      <div class="manifest" id="u1-details"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Words Often Confused</h2>
+    </div>
+    <p class="section-sub"><em>efficient</em> vs <em>effective</em></p>
+
+    <div class="exercise-card">
+      <div class="subsection-head" style="margin-bottom:14px;">
+        <span class="block-badge">1</span>
+        <h3 class="subsection-title" style="font-size:15px;">Choose the best definition (a or b) for each word</h3>
+      </div>
+      <p class="example-sentence"><b>Effective</b> supply-chain management is the only way to make <b>efficient</b> use of global sourcing strategies.</p>
+
+      <div id="u1-confuse1"></div>
+      <button class="check-btn" id="u1-check-confuse1" type="button">Check answers</button>
+    </div>
+
+    <div class="exercise-card">
+      <div class="subsection-head" style="margin-bottom:14px;">
+        <span class="block-badge">2</span>
+        <h3 class="subsection-title" style="font-size:15px;">Complete these sentences with either <em>efficient</em> or <em>effective</em></h3>
+      </div>
+      <div id="u1-confuse2"></div>
+      <button class="check-btn" id="u1-check-confuse2" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Word Partnerships</h2>
+    </div>
+    <p class="section-sub">Match these words to make noun–noun partnerships from the article.</p>
+
+    <div class="exercise-card">
+      <div class="match-grid" id="u1-partnerships"></div>
+      <button class="check-btn" id="u1-check-partnerships" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Vocabulary</h2>
+    </div>
+    <p class="section-sub">Word search</p>
+
+    <div class="exercise-card">
+      <div class="subsection-head" style="margin-bottom:14px;">
+        <span class="block-badge">A</span>
+        <h3 class="subsection-title" style="font-size:15px;">Find the word or phrase in the article which fits each meaning</h3>
+      </div>
+      <p class="exercise-instr">Choose from the word bank for each item.</p>
+      <div id="u1-wordsearch"></div>
+      <button class="check-btn" id="u1-check-wordsearch" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 001 — SUPPLY CHAIN UNIT</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u1-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u1-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  const glossary = [
+    {
+      code: "TERM / 01",
+      term: "Supply chain",
+      def: "The full network of people, companies, resources, and activities involved in producing a good and moving it from raw materials all the way to the end customer — including suppliers, manufacturers, warehouses, transport, and retailers."
+    },
+    {
+      code: "TERM / 02",
+      term: "Efficient (supply chain)",
+      def: "Able to deliver the right product, in the right quantity, to the right place, at the right time — while keeping costs, delays, and waste as low as possible."
+    },
+    {
+      code: "TERM / 03",
+      term: "Vertically integrated production",
+      def: "A production model in which a single company owns and controls several — or all — stages of its supply chain (e.g. raw materials, manufacturing, distribution, and retail) instead of relying on outside suppliers for those stages."
+    },
+    {
+      code: "TERM / 04",
+      term: "Tier-one suppliers",
+      def: "The suppliers that sell directly to the main company (the 'buyer' or brand) — for example, a company that supplies finished car seats directly to a car manufacturer."
+    },
+    {
+      code: "TERM / 05",
+      term: "Tier-two, tier-three & tier-four suppliers",
+      def: "Suppliers further back in the chain: tier-two supplies the tier-one suppliers (e.g. the fabric for those car seats), tier-three supplies the tier-two suppliers (e.g. raw thread or foam), and so on — each tier is one step further from the end company."
+    }
+  ];
+
+  const questions = [
+    { q: "How would you define a <em>supply chain</em>?",
+      a: "The network of people, companies, and activities involved in moving a product from raw materials to the end customer — suppliers, manufacturers, warehouses, transport, retailers." },
+    { q: "What makes a supply chain efficient?",
+      a: "Delivering the right product, in the right quantity, to the right place, at the right time — with low cost, low waste, and few delays." },
+    { q: "What problems can be caused when a supply chain does not work efficiently?",
+      a: "Stock-outs, lost sales, cancelled orders, financial penalties, and loss of customer trust." },
+    { q: "How would you define <em>vertically integrated production</em>?",
+      a: "A model where one company controls most or all stages of production in-house, instead of depending on outside suppliers." },
+    { q: "What do you understand by <em>tier-one suppliers</em>? And what are <em>tier-two</em>, <em>tier-three</em> or <em>tier-four</em> suppliers?",
+      a: "Tier-one suppliers sell directly to the main company. Tier-two, -three, -four are progressively further back — each one supplies the tier in front of it." }
+  ];
+
+  const mainPoints = [
+    { q: "What kinds of company already have efficient supply chains?",
+      a: "Fashion, hi-tech and grocery retailers (para B) — they realised early on the need to get the right stock to the right store at the right time." },
+    { q: "Why is having an effective supply chain so important, especially in this period of globalisation?",
+      a: "Because sourcing globally, e.g. from China and south-east Asia, makes the manager's task harder — there are far more suppliers (and their sub-suppliers) to coordinate with (para C)." },
+    { q: "What can be the result of supply-chain problems?",
+      a: "Stock-outs / empty shelves in retail; cancelled orders worth billions or penalties for late delivery in heavy or complex manufacturing (para E)." },
+    { q: "Which industry sectors have less-developed supply chains?",
+      a: "Slower-moving sectors such as heavy manufacturing (para B), and aerospace/defence, which is around 10 years behind hi-tech or automotive (para F)." },
+    { q: "When does the supply chain become especially critical for manufacturers?",
+      a: "When manufacturers move away from vertically integrated production and depend more on outside suppliers (para F)." },
+    { q: "Why is supply-chain management so important to the aerospace industry?",
+      a: "Because about 80% of an aircraft's cost comes from suppliers and partners, so EADS must coordinate many tiers of suppliers to protect its schedule (para G)." }
+  ];
+
+  const details = [
+    { q: "Why is an efficient supply chain a prize worth working for?",
+      a: "\"Supply chain leadership\" can raise a company's market value by 7–26% above the industry average (para A)." },
+    { q: "Why is it difficult for consumer goods and retailing companies to make improvements to their supply chains?",
+      a: "Because they've already achieved the easiest efficiencies — further gains are much harder (para A)." },
+    { q: "Give two examples of what can result from mistakes in the supply chain of retailing companies.",
+      a: "A warehouse full of summer dresses at the start of autumn, or shelves of last season's mobile phones before Christmas (para B)." },
+    { q: "Who does Hewlett-Packard's supply chain expert need to communicate with in its supply chain?",
+      a: "Not just its 700+ direct suppliers, but also its suppliers' suppliers (para C)." },
+    { q: "What do supply-chain managers increasingly need from their supply chains?",
+      a: "Greater visibility of what's happening and faster access to accurate data (para D)." },
+    { q: "What two examples are given of unexpected problems that can affect a supply chain?",
+      a: "Storms affecting shipping, and a production shortfall (para D)." },
+    { q: "Why is improving the supply chain such a challenge for the aerospace and defence industries?",
+      a: "Because the sector is around 10 years behind hi-tech and automotive in supply-chain performance (para F)." },
+    { q: "What is the cost of a large modern aircraft?",
+      a: "About $100 million (para F)." },
+    { q: "Why is the cost of failure in the supply chain so high for the aerospace industry?",
+      a: "Logistics costs are minor next to the aircraft's price, but about 80% of that cost comes from suppliers — so a supply disruption can threaten the whole schedule (para F, G)." }
+  ];
+
+  const bridge = [
+    { para: "PARA E", clue: "A word for empty shelves that send customers to another store.", answer: "stock-outs" },
+    { para: "PARA C", clue: "A two-word term for the strategies companies use to buy from global suppliers.", answer: "sourcing strategies" },
+    { para: "PARA G", clue: "The overall production timeline that a company needs to protect from disruption.", answer: "master schedule" },
+    { para: "PARA F", clue: "The term from the glossary that appears here too — production where all steps stay in-house.", answer: "vertically integrated production" },
+    { para: "PARA G", clue: "Besides tier-one, which other supplier tiers does Bill Black say he needs visibility into?", answer: "tier-three, tier-four or tier-five suppliers" },
+    { para: "PARA E", clue: "A phrase for the financial consequence of delivering an order late.", answer: "penalties for late delivery" }
+  ];
+
+  const glossaryEl = document.getElementById('u1-glossary');
+  glossary.forEach(item => {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.innerHTML = `
+      <span class="tag-code">${item.code}</span>
+      <p class="tag-term">${item.term}</p>
+      <p class="tag-hint">Click to reveal definition</p>
+      <p class="tag-def">${item.def}</p>
+    `;
+    tag.addEventListener('click', () => tag.classList.toggle('open'));
+    glossaryEl.appendChild(tag);
+  });
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+            <button class="key-toggle" type="button">Answer key</button>
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Key vocabulary, ideas, examples..."></textarea>
+          <div class="answer-key">${item.a}</div>
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      const keyBtn = row.querySelector('.key-toggle');
+      const key = row.querySelector('.answer-key');
+      keyBtn.addEventListener('click', () => {
+        key.classList.toggle('show');
+        keyBtn.textContent = key.classList.contains('show') ? 'Hide key' : 'Answer key';
+      });
+      el.appendChild(row);
+    });
+  }
+
+  renderManifest('u1-questions', questions);
+  renderManifest('u1-mainpoints', mainPoints);
+  renderManifest('u1-details', details);
+
+  const bridgeEl = document.getElementById('u1-bridge');
+  bridge.forEach(item => {
+    const clue = document.createElement('div');
+    clue.className = 'clue';
+    clue.innerHTML = `
+      <span class="clue-para">${item.para}</span>
+      <p class="clue-text">${item.clue}</p>
+      <span class="clue-reveal">Click to check →</span>
+      <p class="clue-answer">${item.answer}</p>
+    `;
+    clue.addEventListener('click', () => clue.classList.toggle('open'));
+    bridgeEl.appendChild(clue);
+  });
+
+  // --- Words Often Confused: exercise 1 (definitions) ---
+  const defOptions = {
+    a: "when something works well, especially in terms of time and costs",
+    b: "when something works well and produces a good result"
+  };
+  const confuse1Data = [
+    { word: "efficient", correct: "a" },
+    { word: "effective", correct: "b" }
+  ];
+  const confuse1El = document.getElementById('u1-confuse1');
+  confuse1Data.forEach((item, idx) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.dataset.key = `u1-confuse1-${idx}`;
+    row.innerHTML = `
+      <span class="confuse-word">${item.word}</span>
+      <button class="choice-btn" data-value="a" type="button">a) ${defOptions.a}</button>
+      <button class="choice-btn" data-value="b" type="button">b) ${defOptions.b}</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    confuse1El.appendChild(row);
+  });
+  document.getElementById('u1-check-confuse1').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = confuse1El.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- Words Often Confused: exercise 2 (fill in the blank) ---
+  const confuse2Data = [
+    { text: "To remain competitive, companies need to have highly", after: "supply chains.", answer: "efficient" },
+    { text: "Companies that manage their core processes in a more cost-", after: "way than their competitors will gain the advantage in the marketplace.", answer: "effective" },
+    { text: "Suppliers and customers need to have", after: "communication systems in order to share information about production needs.", answer: "effective" },
+    { text: "A well-run supply chain can make a company more", after: ", leading to significantly reduced production costs.", answer: "efficient" }
+  ];
+  const confuse2El = document.getElementById('u1-confuse2');
+  confuse2Data.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <span class="fill-num">${i+1}.</span>
+      <span>${item.text}
+        <select class="inline-select" data-answer="${item.answer}" data-key="u1-confuse2-${i}">
+          <option value="">...</option>
+          <option value="efficient">efficient</option>
+          <option value="effective">effective</option>
+        </select>
+        ${item.after}
+      </span>
+    `;
+    confuse2El.appendChild(row);
+  });
+  document.getElementById('u1-check-confuse2').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = confuse2El.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- Word Partnerships ---
+  const partnershipsData = [
+    { word: "production", options: ["value","goods","capacity","costs","average","shortfall"], answer: "costs" },
+    { word: "manufacturing", options: ["value","goods","capacity","costs","average","shortfall"], answer: "capacity" },
+    { word: "market", options: ["value","goods","capacity","costs","average","shortfall"], answer: "value" },
+    { word: "industry", options: ["value","goods","capacity","costs","average","shortfall"], answer: "average" },
+    { word: "production", options: ["value","goods","capacity","costs","average","shortfall"], answer: "shortfall" },
+    { word: "consumer", options: ["value","goods","capacity","costs","average","shortfall"], answer: "goods" }
+  ];
+  const partnershipsEl = document.getElementById('u1-partnerships');
+  partnershipsData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    const optionsHtml = item.options.map(o => `<option value="${o}">${o}</option>`).join('');
+    row.innerHTML = `
+      <span class="match-word">${i+1}. ${item.word}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u1-partnerships-${i}">
+        <option value="">...</option>
+        ${optionsHtml}
+      </select>
+    `;
+    partnershipsEl.appendChild(row);
+  });
+  document.getElementById('u1-check-partnerships').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = partnershipsEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- Vocabulary: Word search (closed answers) ---
+  const wordBank = [
+    "retailers", "stock", "store", "warehouse", "source", "shortfall",
+    "divert", "vendor", "stock-outs", "penalties", "tier-one suppliers",
+    "tier-three, four or five suppliers", "sourcing strategies", "consumer goods",
+    "market value", "industry average", "manufacturing capacity", "master schedule"
+  ];
+  const wordSearchData = [
+    { clue: "companies which sell products to the public", para: "B", answer: "retailers" },
+    { clue: "goods or products which are stored and waiting to be sold", para: "B", answer: "stock" },
+    { clue: "another name for a shop", para: "B", answer: "store" },
+    { clue: "a place to store goods", para: "B", answer: "warehouse" },
+    { clue: "to buy or get materials, components, etc.", para: "C", answer: "source" },
+    { clue: "when not enough goods are produced by a manufacturer", para: "D", answer: "shortfall" },
+    { clue: "send to a different destination", para: "D", answer: "divert" },
+    { clue: "a company that sells to another company", para: "D", answer: "vendor" },
+    { clue: "when shops have empty shelves", para: "E", answer: "stock-outs" },
+    { clue: "financial punishments", para: "E", answer: "penalties" },
+    { clue: "direct suppliers to a customer", para: "G", answer: "tier-one suppliers" },
+    { clue: "suppliers to the suppliers of a company's direct suppliers, suppliers to those suppliers, etc.", para: "G", answer: "tier-three, four or five suppliers" }
+  ];
+  const wordSearchEl = document.getElementById('u1-wordsearch');
+  const bankOptionsHtml = wordBank.map(w => `<option value="${w}">${w}</option>`).join('');
+  wordSearchData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <span class="fill-num">${i+1}.</span>
+      <span>${item.clue} <em style="color:var(--steel); font-style:normal; font-size:12px;">(paragraph ${item.para})</em>
+        <select class="inline-select" data-answer="${item.answer}" data-key="u1-wordsearch-${i}">
+          <option value="">...</option>
+          ${bankOptionsHtml}
+        </select>
+      </span>
+    `;
+    wordSearchEl.appendChild(row);
+  });
+  document.getElementById('u1-check-wordsearch').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = wordSearchEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- Save / load answers (localStorage — works when this file is opened
+  // directly in a browser; saved answers stay on this device/browser) ---
+  const STORAGE_KEY = 'michel-supply-chain-answers';
+  const statusEl = document.getElementById('u1-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = ''; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, confuse1: {}, confuse2: {}, partnerships: {}, wordsearch: {} };
+    document.querySelectorAll('textarea.notes[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('.confuse-row[data-key]').forEach(row => {
+      const sel = row.querySelector('.choice-btn.selected, .choice-btn.correct, .choice-btn.incorrect');
+      if(sel) state.confuse1[row.dataset.key] = sel.dataset.value;
+    });
+    document.querySelectorAll('select[data-key^="u1-confuse2-"]').forEach(s => {
+      if(s.value) state.confuse2[s.dataset.key] = s.value;
+    });
+    document.querySelectorAll('select[data-key^="u1-partnerships-"]').forEach(s => {
+      if(s.value) state.partnerships[s.dataset.key] = s.value;
+    });
+    document.querySelectorAll('select[data-key^="u1-wordsearch-"]').forEach(s => {
+      if(s.value) state.wordsearch[s.dataset.key] = s.value;
+    });
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setStatus('✓ Saved — will be here next time you open this file');
+    }catch(err){
+      setStatus('Could not save in this browser');
+    }
+  }
+
+  function loadAnswers(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const state = JSON.parse(raw);
+
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+
+      Object.entries(state.confuse1 || {}).forEach(([key, val]) => {
+        const row = document.querySelector(`.confuse-row[data-key="${key}"]`);
+        if(row){
+          const btn = row.querySelector(`.choice-btn[data-value="${val}"]`);
+          if(btn) btn.classList.add('selected');
+        }
+      });
+
+      Object.entries(state.confuse2 || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+
+      Object.entries(state.partnerships || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+
+      Object.entries(state.wordsearch || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable — ignore.
+    }
+  }
+
+  document.getElementById('u1-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u1Root = document.getElementById('view-unit1');
+  const u1DebouncedSave = debounce(saveAnswers, 700);
+  u1Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u1DebouncedSave();
+  });
+  u1Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u1Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u1DebouncedSave();
+  });
+
+  loadAnswers();
+
+
+
+})();
+</script>
+
+
+</div>
+
+<!-- ============ UNIT 2 ============ -->
+<div id="view-unit2" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 2 · Business English — Logistics</div>
+    <h1>Using the supply chain to increase sales</h1>
+    <p class="hero-desc">This unit describes how Procter &amp; Gamble is using its supply chain not only to improve profits but also to increase sales growth.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Before You Read — Discuss</h2>
+    </div>
+    <p class="section-sub">Talk through each question out loud. Use "Notes" if you want to jot down key vocabulary.</p>
+
+    <div class="manifest" id="u2-questions"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Watch First</h2>
+    </div>
+    <p class="section-sub">Watch the video, then complete the exercises below.</p>
+
+    <div class="article" style="margin-bottom:28px;">
+      <div style="position:relative; width:100%; padding-top:56.25%; border-radius:10px; overflow:hidden;">
+        <iframe src="https://www.youtube-nocookie.com/embed/qYac28pJ_hc?rel=0" title="Supply Chain Management video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
+      </div>
+      <p style="text-align:center; margin: 10px 0 0; font-size:12.5px;">
+        <a href="https://www.youtube.com/watch?v=qYac28pJ_hc" target="_blank" rel="noopener" style="color: var(--teal); text-decoration:none; font-family:'Plus Jakarta Sans', sans-serif; font-weight:600;">▶ Trouble loading? Watch on YouTube ↗</a>
+      </p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">A</span>
+        <h3 class="subsection-title">True or False</h3>
+      </div>
+      <p class="subsection-instr">Decide if each statement is true or false, according to the video.</p>
+      <div class="exercise-card">
+        <div id="u2-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+        <button class="check-btn" id="u2-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">B</span>
+        <h3 class="subsection-title">Multiple Choice</h3>
+      </div>
+      <p class="subsection-instr">Choose the correct option for each question.</p>
+      <div class="exercise-card">
+        <div id="u2-mcq" style="display:flex; flex-direction:column; gap:18px;"></div>
+        <button class="check-btn" id="u2-check-mcq" type="button" style="margin-top:8px;">Check answers</button>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">C</span>
+        <h3 class="subsection-title">Key Terms</h3>
+      </div>
+      <p class="subsection-instr">Match each term to its definition from the video.</p>
+      <div class="exercise-card">
+        <div class="match-grid" id="u2-vocab"></div>
+        <button class="check-btn" id="u2-check-vocab" type="button">Check answers</button>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">D</span>
+        <h3 class="subsection-title">Complete the Sentences</h3>
+      </div>
+      <p class="subsection-instr">Choose from the word bank for each gap.</p>
+      <div class="exercise-card">
+        <div id="u2-fill"></div>
+        <button class="check-btn" id="u2-check-fill" type="button">Check answers</button>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">E</span>
+        <h3 class="subsection-title">Put in Order</h3>
+      </div>
+      <p class="subsection-instr">Number these stages of SCM evolution from 1 (earliest) to 4 (most recent), according to the video.</p>
+      <div class="exercise-card">
+        <div class="match-grid" id="u2-order"></div>
+        <button class="check-btn" id="u2-check-order" type="button">Check answers</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Reading</h2>
+    </div>
+    <p class="section-sub">Full article, section by section (A–G).</p>
+
+    <div class="article">
+      <div class="article-inner">
+        <div class="article-kicker">Financial Times</div>
+        <h3 class="article-title">Adding value with the supply chain</h3>
+        <p class="byline">by Jonathan Birchall</p>
+
+        <div class="article-body">
+          <div class="para">
+            <span class="letter-badge">A</span>
+            <p>As the manager in charge of the world's largest supply chain, Keith Harrison believes the time has come to give the business of logistics more credit. The Head of Global Product Supply at Procter &amp; Gamble believes the search for a competitive edge will focus more on supply-chain efficiency as retailers and suppliers battle huge increases in raw material and energy costs. "Today you have road congestion, you have freight costs, driver shortages, capacity issues. Working capital is at a premium. Competition among retailers and vendors is higher. All of this is putting pressure on having a more efficient supply chain. This is more critical than it has been before."</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">B</span>
+            <p>Since his appointment in 2001, Mr Harrison has been at the forefront of efforts to drive costs from P&amp;G's supply chain, helping the company meet its long-term sales and earnings growth targets, in spite of surging input costs. But he says P&amp;G has also been looking increasingly over the past three years at ways to turn improvements in the supply chain into top-line sales growth. <q class="pull">"We're trying to make the supply chain into a growth engine for the company,"</q> he says. "A lot of the time, supply-chain management is reactive, or passive, cost control. But we think there's also an opportunity for us also to use the supply chain to create top-line growth as well as bottom-line performance."</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">C</span>
+            <p>An effective supply chain helps manufacturers by reducing a retailer's "out-of-stocks", which in turn prevents lost sales. Those sales also benefit the retailer, while efficient delivery of products to meet demand can also reduce the costs of holding inventory to the retailer.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">D</span>
+            <p>P&amp;G is telling retailers that it should be rewarded for the benefits its supply chain delivers. "If I do something with my supply chain to reduce my customer's inventories, I want more than just the 'supplier of the year' award," he says. <q class="pull">"How do we get that value that we've created at least partially reinvested in growing our business?"</q> Do we get sharper pricing, better features, more display, better shelving?"</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">E</span>
+            <p>As an example of the potential benefits, Mr Harrison gives the example of a pilot project with Wal-Mart in the US, whose worldwide stores account for 15 per cent of P&amp;G's overall sales. The two established a cooperative relationship in the late 1980s, starting with Wal-Mart's decision to allow P&amp;G and other suppliers access to the customer sales data collected by its Retail Link computer system.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">F</span>
+            <p>Over the past 12 months, a P&amp;G factory in Missouri has been using live sales data from stores not to forecast demand but to schedule replenishment deliveries on a store-by-store basis for a single test product. Rather than shipping the required volume to a distribution centre, where it is then divided up for each store, the shipments are instead prepared at the factory for the right store. When the goods arrive at the Wal-Mart distribution centre, they are moved directly from P&amp;G's truck to the appropriate Wal-Mart truck, with no time in storage. <q class="pull">"It is assembled for a store, and it is just flowing through the system,"</q> says Mr Harrison.</p>
+          </div>
+
+          <div class="para">
+            <span class="letter-badge">G</span>
+            <p>Kevin O'Marah, a logistics consultant at AMR Research, believes P&amp;G is the first consumer goods company to use the Retail Link data in this way.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Reading Comprehension</h2>
+    </div>
+    <p class="section-sub">Go back to the article to answer.</p>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">A</span>
+        <h3 class="subsection-title">Understanding the main points</h3>
+      </div>
+      <p class="subsection-instr">Read the article and choose the statement that expresses the ideas most accurately.</p>
+      <div class="exercise-card">
+        <div id="u2-mainchoice" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <button class="check-btn" id="u2-check-mainchoice" type="button" style="margin-top:14px;">Check answer</button>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-head">
+        <span class="block-badge">B</span>
+        <h3 class="subsection-title">Understanding details</h3>
+      </div>
+      <p class="subsection-instr">Read the article again and answer these questions.</p>
+      <div class="manifest" id="u2-details"></div>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 002 — UNIT 2: SUPPLY CHAIN &amp; SALES</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u2-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u2-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  const questions = [
+    { q: "In what ways do you think a company producing consumer products can use its supply chain to increase sales growth?",
+      a: "By improving on-shelf availability (fewer stock-outs), responding faster to demand spikes, sharing sales data with retailers to plan production and deliveries, and using the supply chain itself as a source of insight into what's selling." },
+    { q: "What are the benefits to retailers if their suppliers have efficient supply chains?",
+      a: "Fewer stock-outs and lost sales, lower inventory costs, more reliable and predictable deliveries, faster reaction to changes in demand, and a stronger, more collaborative relationship with the supplier." },
+    { q: "How can deliveries to the distribution centre of a retailer be made more efficient?",
+      a: "Better forecasting and data-sharing between supplier and retailer, consolidating and scheduling deliveries, standardising packaging/pallets, using tracking technology for visibility, and coordinating delivery windows to reduce congestion at the dock." }
+  ];
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+            <button class="key-toggle" type="button">Answer key</button>
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Key vocabulary, ideas, examples..."></textarea>
+          <div class="answer-key">${item.a}</div>
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      const keyBtn = row.querySelector('.key-toggle');
+      const key = row.querySelector('.answer-key');
+      keyBtn.addEventListener('click', () => {
+        key.classList.toggle('show');
+        keyBtn.textContent = key.classList.contains('show') ? 'Hide key' : 'Answer key';
+      });
+      el.appendChild(row);
+    });
+  }
+
+  renderManifest('u2-questions', questions);
+
+  // --- A) True or False ---
+  const tfData = [
+    { text: "According to the video, a single shipping mistake can affect tens of billions of dollars in global trade.", correct: true },
+    { text: "The three key players in a basic supply chain are the seller, the producer, and the customer.", correct: true },
+    { text: "Dell manufactures laptops in advance and stores them in warehouses before customers order them.", correct: false },
+    { text: "A stable supply chain strategy is best suited for products with highly unpredictable demand.", correct: false },
+    { text: "Apple is given as an example of vertical supply chain management, because it designs its own chips.", correct: true }
+  ];
+  const tfEl = document.getElementById('u2-tf');
+  tfData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    tfEl.appendChild(row);
+  });
+  document.getElementById('u2-check-tf').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = tfEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- B) Multiple Choice ---
+  const mcqData = [
+    { q: "Which company is given as an example of a 'Build-to-Order' (reactive) supply chain?",
+      options: ["P&G", "Dell", "Coca-Cola", "Walmart"], correct: "Dell" },
+    { q: "Which flow refers to the movement of money through the supply chain?",
+      options: ["Information flow", "Product flow", "Cash flow", "Reverse flow"], correct: "Cash flow" },
+    { q: "Which company is used as the example of 'Horizontal Integration' (outsourcing production to others)?",
+      options: ["Apple", "Tesla", "Nike", "Amazon"], correct: "Nike" },
+    { q: "Which technology does the video say helps track goods transparently and prevent fraud?",
+      options: ["Drones", "Blockchain", "RFID", "AI forecasting"], correct: "Blockchain" },
+    { q: "Which stage of SCM evolution is Walmart used as the example of?",
+      options: ["Multiple Dysfunctions Stage", "Semi-Functional Enterprise", "Integrated Enterprise", "Extended Enterprise"], correct: "Integrated Enterprise" }
+  ];
+  const mcqEl = document.getElementById('u2-mcq');
+  mcqData.forEach((item, i) => {
+    const block = document.createElement('div');
+    block.innerHTML = `<p class="q-text" style="margin-bottom:8px;">${i+1}. ${item.q}</p>`;
+    const optsWrap = document.createElement('div');
+    optsWrap.style.display = 'flex';
+    optsWrap.style.flexDirection = 'column';
+    optsWrap.style.gap = '8px';
+    item.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.type = 'button';
+      btn.style.flex = '0 0 auto';
+      btn.dataset.correct = (opt === item.correct);
+      btn.dataset.key = `u2-mcq-${i}`;
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        optsWrap.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+      optsWrap.appendChild(btn);
+    });
+    block.appendChild(optsWrap);
+    mcqEl.appendChild(block);
+  });
+  document.getElementById('u2-check-mcq').addEventListener('click', (e) => {
+    let correctCount = 0;
+    mcqEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = btn.classList.contains('selected');
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true') btn.classList.add('correct');
+      else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, mcqData.length);
+  });
+
+  // --- C) Key Terms (matching) ---
+  const vocabDefs = [
+    "Sourcing and buying raw materials or components",
+    "Distributing finished products to retailers or customers",
+    "Managing product returns, repairs, recycling or disposal",
+    "Transporting raw materials to the manufacturing plant",
+    "An inventory strategy that reduces excess stock by producing closer to when it's needed"
+  ];
+  const vocabData = [
+    { term: "Procurement", answer: "Sourcing and buying raw materials or components" },
+    { term: "Reverse Logistics", answer: "Managing product returns, repairs, recycling or disposal" },
+    { term: "Inbound Logistics", answer: "Transporting raw materials to the manufacturing plant" },
+    { term: "Outbound Logistics", answer: "Distributing finished products to retailers or customers" },
+    { term: "Just-in-Time (JIT)", answer: "An inventory strategy that reduces excess stock by producing closer to when it's needed" }
+  ];
+  const vocabEl = document.getElementById('u2-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:170px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u2-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u2-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- D) Complete the Sentences ---
+  const fillBank = ["information", "cash", "product", "reverse", "reactive", "stable", "efficient reactive"];
+  const fillData = [
+    { before: "The movement of data between suppliers, manufacturers and retailers is called the", after: "flow.", answer: "information" },
+    { before: "Payments made by customers and to suppliers make up the", after: "flow.", answer: "cash" },
+    { before: "Zara's fast-fashion model is an example of an", after: "supply chain — cost-efficient but able to react quickly to demand.", answer: "efficient reactive" },
+    { before: "P&G uses a", after: "supply chain strategy for products like toothpaste and detergent, which have consistent demand.", answer: "stable" },
+    { before: "Companies that only produce after receiving a customer order, like Dell, use a", after: "supply chain strategy.", answer: "reactive" }
+  ];
+  const fillEl = document.getElementById('u2-fill');
+  const fillOptionsHtml = fillBank.map(w => `<option value="${w}">${w}</option>`).join('');
+  fillData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <span class="fill-num">${i+1}.</span>
+      <span>${item.before}
+        <select class="inline-select" data-answer="${item.answer}" data-key="u2-fill-${i}">
+          <option value="">...</option>
+          ${fillOptionsHtml}
+        </select>
+        ${item.after}
+      </span>
+    `;
+    fillEl.appendChild(row);
+  });
+  document.getElementById('u2-check-fill').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = fillEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- E) Put in Order ---
+  const orderData = [
+    { stage: "Semi-Functional Enterprise", answer: "2" },
+    { stage: "Extended Enterprise", answer: "4" },
+    { stage: "Multiple Dysfunctions Stage", answer: "1" },
+    { stage: "Integrated Enterprise", answer: "3" }
+  ];
+  const orderEl = document.getElementById('u2-order');
+  const orderOptionsHtml = ["1","2","3","4"].map(n => `<option value="${n}">${n}</option>`).join('');
+  orderData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:220px;">${item.stage}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u2-order-${i}">
+        <option value="">...</option>
+        ${orderOptionsHtml}
+      </select>
+    `;
+    orderEl.appendChild(row);
+  });
+  document.getElementById('u2-check-order').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = orderEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- Reading Comprehension: A) main points (single choice) ---
+  const mainChoiceOptions = [
+    { text: "Suppliers need to reduce their supply-chain costs because of increased transport costs.", correct: false },
+    { text: "By reducing supply-chain costs, Procter & Gamble (P&G) is achieving higher profits.", correct: false },
+    { text: "P&G is using its supply chain to increase sales growth.", correct: true }
+  ];
+  const mainChoiceEl = document.getElementById('u2-mainchoice');
+  mainChoiceOptions.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.type = 'button';
+    btn.style.flex = '0 0 auto';
+    btn.dataset.correct = opt.correct;
+    btn.dataset.key = `u2-mainchoice-${i}`;
+    btn.textContent = `${i+1}) ${opt.text}`;
+    btn.addEventListener('click', () => {
+      mainChoiceEl.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+      btn.classList.add('selected');
+    });
+    mainChoiceEl.appendChild(btn);
+  });
+  document.getElementById('u2-check-mainchoice').addEventListener('click', (e) => {
+    let correctCount = 0;
+    mainChoiceEl.querySelectorAll('.choice-btn').forEach(b => {
+      const isSelected = b.classList.contains('selected');
+      b.classList.remove('selected');
+      if(b.dataset.correct === 'true') b.classList.add('correct');
+      else if(isSelected) b.classList.add('incorrect');
+      if(isSelected && b.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, 1);
+  });
+
+  // --- Reading Comprehension: B) understanding details ---
+  const details = [
+    { q: "What is Keith Harrison's job, and when did he start it?",
+      a: "He's the Head of Global Product Supply at P&G — he was appointed in 2001 (para A, B)." },
+    { q: "How big is P&G's supply chain?",
+      a: "It's described as the world's largest supply chain (para A)." },
+    { q: "What pressure are retailers and suppliers under?",
+      a: "Rising costs and tighter capacity: road congestion, freight costs, driver shortages, expensive working capital, and stronger competition among retailers and vendors (para A)." },
+    { q: "What is one thing that P&G is trying to do with its supply chain?",
+      a: "Drive down costs — traditional, reactive cost control — to help meet its long-term sales and earnings growth targets (para B)." },
+    { q: "What else is P&G trying to do with its supply chain?",
+      a: "Turn supply-chain improvements into top-line sales growth — use the supply chain as a \"growth engine\", not just a cost centre (para B)." },
+    { q: "How does supply-chain management usually operate in a company?",
+      a: "It's usually reactive or passive — focused mainly on cost control (para B)." },
+    { q: "How can a supplier's effective supply chain help retailers?",
+      a: "By reducing the retailer's out-of-stocks (so fewer lost sales) and, through efficient delivery matched to demand, lowering the retailer's cost of holding inventory (para C)." },
+    { q: "What does P&G want from its customers if it improves their supply-chain performance and reduces their out-of-stocks and inventory levels?",
+      a: "More than just a \"supplier of the year\" award — sharper pricing, better features, more display space, better shelving (para D)." },
+    { q: "How important a customer is Wal-Mart for P&G?",
+      a: "Very important — Wal-Mart's worldwide stores account for 15% of P&G's overall sales (para E)." },
+    { q: "What kind of co-operation do Wal-Mart and P&G have?",
+      a: "A cooperative relationship dating back to the late 1980s: Wal-Mart gives P&G access to the customer sales data collected by its Retail Link system (para E)." },
+    { q: "Is P&G the only company to have access to Wal-Mart's Retail Link data?",
+      a: "No — Retail Link data is shared with suppliers generally, but P&G is believed to be the first consumer goods company to use it the way described (scheduling store-by-store replenishment) (para E, G)." },
+    { q: "What is special about P&G's Missouri factory?",
+      a: "It uses live store sales data to schedule replenishment deliveries store-by-store (not just to forecast demand), shipping goods already sorted for each store — so they move straight from P&G's truck to Wal-Mart's truck with no time in storage (para F)." }
+  ];
+  renderManifest('u2-details', details);
+
+  // --- Save / load answers (localStorage) ---
+  const STORAGE_KEY = 'michel-unit2-answers';
+  const statusEl = document.getElementById('u2-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = ''; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, mainchoice: null, choices: {}, selects: {} };
+    document.querySelectorAll('textarea.notes[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    const selectedChoice = mainChoiceEl.querySelector('.choice-btn.selected, .choice-btn.correct, .choice-btn.incorrect');
+    if(selectedChoice) state.mainchoice = selectedChoice.dataset.key;
+    document.querySelectorAll('.choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = true;
+      }
+    });
+    document.querySelectorAll('select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setStatus('✓ Saved — will be here next time you open this file');
+    }catch(err){
+      setStatus('Could not save in this browser');
+    }
+  }
+
+  function loadAnswers(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const state = JSON.parse(raw);
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      if(state.mainchoice){
+        const b = mainChoiceEl.querySelector(`[data-key="${state.mainchoice}"]`);
+        if(b) b.classList.add('selected');
+      }
+      Object.keys(state.choices || {}).forEach(key => {
+        const b = document.querySelector(`.choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u2-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u2Root = document.getElementById('view-unit2');
+  const u2DebouncedSave = debounce(saveAnswers, 700);
+  u2Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u2DebouncedSave();
+  });
+  u2Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u2Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u2DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+
+</div>
+
+<!-- ============ UNIT 3 ============ -->
+<div id="view-unit3" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 3 · Business English — Logistics</div>
+    <h1>Supply chain vocabulary in practice</h1>
+    <p class="hero-desc">A standalone practice unit — six exercises to review and stretch the supply-chain vocabulary from Units 1 and 2, plus some new terms.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Key Terms</h2>
+    </div>
+    <p class="section-sub">Match each term to its definition.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u3-vocab"></div>
+      <button class="check-btn" id="u3-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">True or False</h2>
+    </div>
+    <p class="section-sub">Decide if each statement is true or false.</p>
+    <div class="exercise-card">
+      <div id="u3-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u3-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Multiple Choice</h2>
+    </div>
+    <p class="section-sub">Choose the correct option for each question.</p>
+    <div class="exercise-card">
+      <div id="u3-mcq" style="display:flex; flex-direction:column; gap:18px;"></div>
+      <button class="check-btn" id="u3-check-mcq" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Complete the Sentences</h2>
+    </div>
+    <p class="section-sub">Choose from the word bank for each gap.</p>
+    <div class="exercise-card">
+      <div id="u3-fill"></div>
+      <button class="check-btn" id="u3-check-fill" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Odd One Out</h2>
+    </div>
+    <p class="section-sub">In each group, choose the word that doesn't belong.</p>
+    <div class="exercise-card">
+      <div id="u3-odd" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u3-check-odd" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Synonyms</h2>
+    </div>
+    <p class="section-sub">Match each word to the term closest in meaning, as used in business English.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u3-syn"></div>
+      <button class="check-btn" id="u3-check-syn" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 003 — UNIT 3: VOCABULARY PRACTICE</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u3-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u3-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  // --- 01) Key Terms (matching) ---
+  const vocabDefs = [
+    "The amount of time between placing an order and receiving it",
+    "A stage in a process that slows down the entire supply chain",
+    "An order that cannot be filled immediately because the item is out of stock",
+    "Extra inventory kept in reserve in case of unexpected demand or delays",
+    "Cost advantages a company gains as production volume increases",
+    "A company that arranges the shipping and storage of goods on behalf of others",
+    "Moving goods from an incoming truck straight onto an outgoing one, with little or no storage in between",
+    "Predicting future customer demand in order to plan production and inventory"
+  ];
+  const vocabData = [
+    { term: "Lead time", answer: "The amount of time between placing an order and receiving it" },
+    { term: "Bottleneck", answer: "A stage in a process that slows down the entire supply chain" },
+    { term: "Backorder", answer: "An order that cannot be filled immediately because the item is out of stock" },
+    { term: "Buffer stock", answer: "Extra inventory kept in reserve in case of unexpected demand or delays" },
+    { term: "Economies of scale", answer: "Cost advantages a company gains as production volume increases" },
+    { term: "Freight forwarder", answer: "A company that arranges the shipping and storage of goods on behalf of others" },
+    { term: "Cross-docking", answer: "Moving goods from an incoming truck straight onto an outgoing one, with little or no storage in between" },
+    { term: "Demand forecasting", answer: "Predicting future customer demand in order to plan production and inventory" }
+  ];
+  const vocabEl = document.getElementById('u3-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:170px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u3-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u3-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 02) True or False ---
+  const tfData = [
+    { text: "Lead time refers to how long it takes a company to hire new supply-chain staff.", correct: false },
+    { text: "A bottleneck can slow down an entire supply chain, even if it happens at just one stage.", correct: true },
+    { text: "Buffer stock is inventory a company keeps in reserve in case of unexpected demand or delays.", correct: true },
+    { text: "Cross-docking means storing goods in a warehouse for several months before shipping them out.", correct: false },
+    { text: "Economies of scale generally make each unit cheaper to produce as production volume increases.", correct: true }
+  ];
+  const tfEl = document.getElementById('u3-tf');
+  tfData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    tfEl.appendChild(row);
+  });
+  document.getElementById('u3-check-tf').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = tfEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- 03) Multiple Choice ---
+  const mcqData = [
+    { q: "Which term describes an order that can't be fulfilled because the product is out of stock?",
+      options: ["Lead time", "Backorder", "Buffer stock", "Freight forwarder"], correct: "Backorder" },
+    { q: "What does 'demand forecasting' help a company do?",
+      options: ["Hire new employees", "Predict future customer demand", "Reduce office costs", "Design packaging"], correct: "Predict future customer demand" },
+    { q: "Which of these is a benefit of economies of scale?",
+      options: ["Higher cost per unit", "Lower cost per unit as production increases", "Slower delivery times", "More warehouse space needed"], correct: "Lower cost per unit as production increases" },
+    { q: "What is a freight forwarder responsible for?",
+      options: ["Manufacturing products", "Arranging shipping and storage of goods", "Setting retail prices", "Managing customer service"], correct: "Arranging shipping and storage of goods" },
+    { q: "Which practice minimises storage time by moving goods directly from inbound to outbound transport?",
+      options: ["Backordering", "Cross-docking", "Buffer stocking", "Forecasting"], correct: "Cross-docking" }
+  ];
+  const mcqEl = document.getElementById('u3-mcq');
+  mcqData.forEach((item, i) => {
+    const block = document.createElement('div');
+    block.innerHTML = `<p class="q-text" style="margin-bottom:8px;">${i+1}. ${item.q}</p>`;
+    const optsWrap = document.createElement('div');
+    optsWrap.style.display = 'flex';
+    optsWrap.style.flexDirection = 'column';
+    optsWrap.style.gap = '8px';
+    item.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.type = 'button';
+      btn.style.flex = '0 0 auto';
+      btn.dataset.correct = (opt === item.correct);
+      btn.dataset.key = `u3-mcq-${i}`;
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        optsWrap.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+      optsWrap.appendChild(btn);
+    });
+    block.appendChild(optsWrap);
+    mcqEl.appendChild(block);
+  });
+  document.getElementById('u3-check-mcq').addEventListener('click', (e) => {
+    let correctCount = 0;
+    mcqEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = btn.classList.contains('selected');
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true') btn.classList.add('correct');
+      else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, mcqData.length);
+  });
+
+  // --- 04) Complete the Sentences ---
+  const fillBank = ["lead time", "bottleneck", "buffer stock", "forecasting", "backorder"];
+  const fillData = [
+    { before: "If a supplier can't deliver on time, it often creates a", after: "in the whole supply chain.", answer: "bottleneck" },
+    { before: "The", after: "for this component is six weeks, so we need to order early.", answer: "lead time" },
+    { before: "We keep extra", after: "in the warehouse in case demand suddenly increases.", answer: "buffer stock" },
+    { before: "Accurate demand", after: "helps companies avoid overproduction or shortages.", answer: "forecasting" },
+    { before: "The item is currently on", after: ", so it will ship as soon as new stock arrives.", answer: "backorder" }
+  ];
+  const fillEl = document.getElementById('u3-fill');
+  const fillOptionsHtml = fillBank.map(w => `<option value="${w}">${w}</option>`).join('');
+  fillData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <span class="fill-num">${i+1}.</span>
+      <span>${item.before}
+        <select class="inline-select" data-answer="${item.answer}" data-key="u3-fill-${i}">
+          <option value="">...</option>
+          ${fillOptionsHtml}
+        </select>
+        ${item.after}
+      </span>
+    `;
+    fillEl.appendChild(row);
+  });
+  document.getElementById('u3-check-fill').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = fillEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 05) Odd One Out ---
+  const oddData = [
+    { words: ["Warehouse", "Distribution centre", "Storage facility", "Invoice"], odd: "Invoice" },
+    { words: ["Supplier", "Vendor", "Manufacturer", "Customer"], odd: "Customer" },
+    { words: ["Shipping", "Freight", "Transportation", "Marketing"], odd: "Marketing" },
+    { words: ["Inventory", "Stock", "Goods", "Salary"], odd: "Salary" },
+    { words: ["Procurement", "Sourcing", "Purchasing", "Advertising"], odd: "Advertising" }
+  ];
+  const oddEl = document.getElementById('u3-odd');
+  oddData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.odd;
+    const wordsHtml = item.words.map(w => `<button class="choice-btn" data-value="${w}" type="button" style="flex:0 1 160px;">${w}</button>`).join('');
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. Which word doesn't belong?</span>
+      ${wordsHtml}
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    oddEl.appendChild(row);
+  });
+  document.getElementById('u3-check-odd').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = oddEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- 06) Synonyms ---
+  const synOptions = ["Inventory", "Vendor", "Consignment", "Distribution centre", "Customer"];
+  const synData = [
+    { term: "Stock", answer: "Inventory" },
+    { term: "Supplier", answer: "Vendor" },
+    { term: "Shipment", answer: "Consignment" },
+    { term: "Warehouse", answer: "Distribution centre" },
+    { term: "Buyer", answer: "Customer" }
+  ];
+  const synEl = document.getElementById('u3-syn');
+  const synOptionsHtml = synOptions.map(w => `<option value="${w}">${w}</option>`).join('');
+  synData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:150px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u3-syn-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${synOptionsHtml}
+      </select>
+    `;
+    synEl.appendChild(row);
+  });
+  document.getElementById('u3-check-syn').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = synEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- Save / load answers (localStorage, autosave) ---
+  const STORAGE_KEY = 'michel-unit3-answers';
+  const statusEl = document.getElementById('u3-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit3 .choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = true;
+      }
+    });
+    document.querySelectorAll('#view-unit3 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setStatus('✓ Saved');
+    }catch(err){
+      setStatus('Could not save in this browser');
+    }
+  }
+
+  function loadAnswers(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const state = JSON.parse(raw);
+      Object.keys(state.choices || {}).forEach(key => {
+        const b = document.querySelector(`#view-unit3 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit3 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u3-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u3Root = document.getElementById('view-unit3');
+  const u3DebouncedSave = debounce(saveAnswers, 700);
+  u3Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u3Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u3DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 4 ============ -->
+<div id="view-unit4" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 4 · Business English — Logistics</div>
+    <h1>The stages of the supply chain</h1>
+    <p class="hero-desc">A video-based lesson on the five stages of a supply chain, using Apple and the iPhone as a real-world example.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Warm-up — What Do You Know?</h2>
+    </div>
+    <p class="section-sub">Before watching, answer in English.</p>
+    <div class="manifest" id="u4-warmup"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Vocabulary — Match the Words</h2>
+    </div>
+    <p class="section-sub">Match each word to its definition.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u4-vocab"></div>
+      <button class="check-btn" id="u4-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Listening — True or False</h2>
+    </div>
+    <p class="section-sub">Watch the video, then mark each statement True or False.</p>
+
+    <div class="article" style="margin-bottom:28px;">
+      <div style="position:relative; width:100%; padding-top:56.25%; border-radius:10px; overflow:hidden;">
+        <iframe src="https://www.youtube-nocookie.com/embed/Lpp9bHtPAN0?rel=0" title="Supply Chain Management video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
+      </div>
+      <p style="text-align:center; margin: 10px 0 0; font-size:12.5px;">
+        <a href="https://www.youtube.com/watch?v=Lpp9bHtPAN0" target="_blank" rel="noopener" style="color: var(--teal); text-decoration:none; font-family:'Plus Jakarta Sans', sans-serif; font-weight:600;">▶ Trouble loading? Watch on YouTube ↗</a>
+      </p>
+    </div>
+
+    <div class="exercise-card">
+      <div id="u4-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u4-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+
+    <div class="exercise-card" style="margin-top:18px;">
+      <p class="exercise-instr" style="margin-bottom:10px;">Now correct the false statements — rewrite them so they are true.</p>
+      <textarea class="notes show" data-key="u4-tf-corrections" placeholder="Rewrite the false statements here..." style="min-height:90px;"></textarea>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">While Watching — Complete the Process</h2>
+    </div>
+    <p class="section-sub">Watch again and complete the stages of the supply chain.</p>
+
+    <div class="exercise-card">
+      <div id="u4-process" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-family:'Plus Jakarta Sans', sans-serif; font-weight:600; font-size:15px;"></div>
+      <button class="check-btn" id="u4-check-process" type="button" style="margin-top:14px;">Check answers</button>
+    </div>
+
+    <div class="exercise-card" style="margin-top:18px;">
+      <p class="exercise-instr" style="margin-bottom:10px;">What happens at each stage? Make short notes for each one.</p>
+      <div class="manifest" id="u4-stages"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Video Comprehension — The iPhone Example</h2>
+    </div>
+    <p class="section-sub">Answer in English, in complete sentences.</p>
+    <div class="manifest" id="u4-comprehension"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Discussion — Your Supply Chain</h2>
+    </div>
+    <p class="section-sub">Choose an everyday product, then discuss its supply chain.</p>
+
+    <div class="exercise-card">
+      <div id="u4-product" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px;"></div>
+    </div>
+
+    <div class="manifest" id="u4-discussion"></div>
+  </section>
+
+  <footer>MANIFEST NO. 004 — UNIT 4: STAGES OF THE SUPPLY CHAIN</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u4-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u4-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+            ${item.a ? '<button class="key-toggle" type="button">Answer key</button>' : ''}
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your answer..."></textarea>
+          ${item.a ? `<div class="answer-key">${item.a}</div>` : ''}
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      const keyBtn = row.querySelector('.key-toggle');
+      if(keyBtn){
+        const key = row.querySelector('.answer-key');
+        keyBtn.addEventListener('click', () => {
+          key.classList.toggle('show');
+          keyBtn.textContent = key.classList.contains('show') ? 'Hide key' : 'Answer key';
+        });
+      }
+      el.appendChild(row);
+    });
+  }
+
+  // --- 01) Warm-up ---
+  const warmup = [
+    { q: "What products do you think have a complex supply chain?",
+      a: "Products with many components from different countries tend to have the most complex supply chains — for example smartphones, cars, or laptops, which combine parts sourced from dozens of suppliers worldwide." },
+    { q: "What companies do you associate with supply chain management?",
+      a: "Companies often mentioned include Apple, Amazon, Walmart, Toyota and P&G — all known for highly organised, closely managed supply chains." }
+  ];
+  renderManifest('u4-warmup', warmup);
+
+  // --- 02) Vocabulary — Match the Words ---
+  const vocabDefs = [
+    "The person who buys or uses a product",
+    "The process of making a product",
+    "The amount of a product that people want to buy",
+    "Materials used to make a product",
+    "A company/person that provides products or materials",
+    "The process of taking products to customers or stores",
+    "Products or materials that a company has available",
+    "The process of bringing a product to the customer"
+  ];
+  const vocabData = [
+    { term: "Supplier", answer: "A company/person that provides products or materials" },
+    { term: "Raw materials", answer: "Materials used to make a product" },
+    { term: "Manufacturing", answer: "The process of making a product" },
+    { term: "Distribution", answer: "The process of taking products to customers or stores" },
+    { term: "Customer", answer: "The person who buys or uses a product" },
+    { term: "Demand", answer: "The amount of a product that people want to buy" },
+    { term: "Inventory", answer: "Products or materials that a company has available" },
+    { term: "Delivery", answer: "The process of bringing a product to the customer" }
+  ];
+  const vocabEl = document.getElementById('u4-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:150px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u4-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u4-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 03) Listening — True or False ---
+  const tfData = [
+    { text: "Supply chain management only involves transportation.", correct: false },
+    { text: "Planning is an important part of supply chain management.", correct: true },
+    { text: "Suppliers provide materials and components.", correct: true },
+    { text: "Apple produces every component of the iPhone itself.", correct: false },
+    { text: "A shortage of chips can affect production.", correct: true },
+    { text: "Returns are also part of supply chain management.", correct: true }
+  ];
+  const tfEl = document.getElementById('u4-tf');
+  tfData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    tfEl.appendChild(row);
+  });
+  document.getElementById('u4-check-tf').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = tfEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- 04) While Watching — Complete the Process ---
+  const processBank = ["Sourcing", "Making", "Delivery", "Distribution", "Manufacturing"];
+  const processAnswers = ["Sourcing", "Making", "Delivery"];
+  const processEl = document.getElementById('u4-process');
+  const processOptionsHtml = processBank.map(w => `<option value="${w}">${w}</option>`).join('');
+  processEl.innerHTML = `
+    <span>Planning →</span>
+    <select class="inline-select" data-answer="${processAnswers[0]}" data-key="u4-process-0"><option value="">...</option>${processOptionsHtml}</select>
+    <span>→</span>
+    <select class="inline-select" data-answer="${processAnswers[1]}" data-key="u4-process-1"><option value="">...</option>${processOptionsHtml}</select>
+    <span>→</span>
+    <select class="inline-select" data-answer="${processAnswers[2]}" data-key="u4-process-2"><option value="">...</option>${processOptionsHtml}</select>
+    <span>→ Returns</span>
+  `;
+  document.getElementById('u4-check-process').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = processEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  const stages = [
+    { q: "What happens at the Planning stage?" },
+    { q: "What happens at the Sourcing stage?" },
+    { q: "What happens at the Making stage?" },
+    { q: "What happens at the Delivery stage?" },
+    { q: "What happens at the Returns stage?" }
+  ];
+  renderManifest('u4-stages', stages);
+
+  // --- 05) Video Comprehension ---
+  const comprehension = [
+    { q: "Which company is used as an example in the video?",
+      a: "Apple." },
+    { q: "Which product is discussed?",
+      a: "The iPhone." },
+    { q: "Why are suppliers important for Apple?",
+      a: "Apple depends on suppliers around the world for components and materials — it doesn't manufacture every part itself, so its production relies on those suppliers delivering on time." },
+    { q: "What happened when there was a shortage of chips?",
+      a: "Production was affected — with fewer chips available, Apple could not manufacture as many devices as planned." },
+    { q: "Why can a problem with one supplier affect the entire supply chain?",
+      a: "Because the stages are connected — a delay at one supplier can hold up manufacturing, which then delays distribution and delivery to customers." }
+  ];
+  renderManifest('u4-comprehension', comprehension);
+
+  // --- 06) Discussion — Your Supply Chain ---
+  const products = [
+    { emoji: "📱", label: "Smartphone" },
+    { emoji: "👟", label: "Sneakers" },
+    { emoji: "☕", label: "Coffee" },
+    { emoji: "🍫", label: "Chocolate" },
+    { emoji: "👕", label: "T-shirt" }
+  ];
+  const productEl = document.getElementById('u4-product');
+  products.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.type = 'button';
+    btn.style.flex = '0 0 auto';
+    btn.dataset.key = `u4-product-${i}`;
+    btn.textContent = `${p.emoji} ${p.label}`;
+    btn.addEventListener('click', () => {
+      productEl.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+    productEl.appendChild(btn);
+  });
+
+  const discussion = [
+    { q: "Where do the raw materials for this product come from?" },
+    { q: "Which companies or people are probably involved before it reaches the customer?" },
+    { q: "How is the product likely delivered to stores or customers?" },
+    { q: "What could disrupt this product's supply chain (e.g. weather, strikes, shortages)?" }
+  ];
+  renderManifest('u4-discussion', discussion);
+
+  // --- Save / load answers (localStorage, autosave) ---
+  const STORAGE_KEY = 'michel-unit4-answers';
+  const statusEl = document.getElementById('u4-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit4 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('#view-unit4 .choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = true;
+      }
+    });
+    document.querySelectorAll('#view-unit4 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setStatus('✓ Saved');
+    }catch(err){
+      setStatus('Could not save in this browser');
+    }
+  }
+
+  function loadAnswers(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const state = JSON.parse(raw);
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit4 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      Object.keys(state.choices || {}).forEach(key => {
+        const b = document.querySelector(`#view-unit4 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit4 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u4-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u4Root = document.getElementById('view-unit4');
+  const u4DebouncedSave = debounce(saveAnswers, 700);
+  u4Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u4DebouncedSave();
+  });
+  u4Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u4Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u4DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<script>
+  function showView(id){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+  }
+</script>
+
+</body>
+</html>
