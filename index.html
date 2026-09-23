@@ -768,6 +768,7 @@
   }
   .unit-status.done{ background: rgba(74,222,128,0.15); color: var(--ok); border: 1px solid rgba(74,222,128,0.35); }
   .unit-status.progress{ background: rgba(255,209,102,0.15); color: var(--kraft); border: 1px solid rgba(255,209,102,0.35); }
+  .unit-status.new{ background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.14); }
   .unit-desc{
     font-size: 13.5px;
     color: var(--muted);
@@ -847,6 +848,43 @@
       const card = btn.closest('.exercise-card') || btn.parentElement;
       if(exerciseHasAnswer(card)) btn.click();
     });
+  }
+
+  // --- Menu status badges (New / In progress / Complete), based on how many
+  // gradable exercises (dropdowns + multiple-choice/TF/matching groups) in a
+  // unit already have an answer ---
+  function updateMenuStatus(unitIndex, rootId){
+    const root = document.getElementById(rootId);
+    const badge = document.getElementById('menu-status-' + unitIndex);
+    if(!root || !badge) return;
+
+    let total = 0, answered = 0;
+
+    root.querySelectorAll('select.inline-select').forEach(sel => {
+      total++;
+      if(sel.value) answered++;
+    });
+
+    const groupKeys = new Set();
+    root.querySelectorAll('.choice-btn[data-key]').forEach(btn => groupKeys.add(btn.dataset.key));
+    groupKeys.forEach(key => {
+      total++;
+      const group = root.querySelectorAll(`.choice-btn[data-key="${key}"]`);
+      const hasAnswer = Array.from(group).some(b => b.classList.contains('selected') || b.classList.contains('correct') || b.classList.contains('incorrect'));
+      if(hasAnswer) answered++;
+    });
+
+    badge.classList.remove('new', 'progress', 'done');
+    if(total === 0 || answered === 0){
+      badge.classList.add('new');
+      badge.textContent = 'New';
+    }else if(answered >= total){
+      badge.classList.add('done');
+      badge.textContent = 'Complete';
+    }else{
+      badge.classList.add('progress');
+      badge.textContent = 'In progress';
+    }
   }
 
   // --- Remote sync (Google Sheets, via Apps Script Web App) -----------------
@@ -939,7 +977,7 @@
         <div class="unit-body">
           <div class="unit-title-row">
             <p class="unit-title">The importance of an efficient supply chain</p>
-            <span class="unit-status done">Finished</span>
+            <span class="unit-status new" id="menu-status-1">New</span>
           </div>
           <p class="unit-desc">Glossary, FT article, comprehension, word search &amp; word partnerships.</p>
         </div>
@@ -951,7 +989,7 @@
         <div class="unit-body">
           <div class="unit-title-row">
             <p class="unit-title">Using the supply chain to increase sales</p>
-            <span class="unit-status progress">In progress</span>
+            <span class="unit-status new" id="menu-status-2">New</span>
           </div>
           <p class="unit-desc">How Procter &amp; Gamble uses its supply chain to grow sales, not just cut costs.</p>
         </div>
@@ -963,7 +1001,7 @@
         <div class="unit-body">
           <div class="unit-title-row">
             <p class="unit-title">Supply chain vocabulary in practice</p>
-            <span class="unit-status progress">In progress</span>
+            <span class="unit-status new" id="menu-status-3">New</span>
           </div>
           <p class="unit-desc">Six standalone exercises to review key supply-chain vocabulary and terms.</p>
         </div>
@@ -975,9 +1013,21 @@
         <div class="unit-body">
           <div class="unit-title-row">
             <p class="unit-title">The stages of the supply chain</p>
-            <span class="unit-status progress">In progress</span>
+            <span class="unit-status new" id="menu-status-4">New</span>
           </div>
           <p class="unit-desc">Video lesson (Apple &amp; the iPhone) covering the five stages of a supply chain.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit5')">
+        <div class="unit-num">05</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Story Time — "The Last Leaf"</p>
+            <span class="unit-status new" id="menu-status-5">New</span>
+          </div>
+          <p class="unit-desc">A short story by O. Henry, with listening, vocabulary, comprehension &amp; discussion.</p>
         </div>
         <div class="unit-arrow">&#8594;</div>
       </button>
@@ -1524,6 +1574,7 @@
     });
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
     remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(1, 'view-unit1');
     setStatus('✓ Saved');
   }
 
@@ -1572,6 +1623,7 @@
       });
 
       autoCheckAnswered('view-unit1');
+      updateMenuStatus(1, 'view-unit1');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable — ignore.
@@ -2143,6 +2195,7 @@
     });
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
     remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(2, 'view-unit2');
     setStatus('✓ Saved');
   }
 
@@ -2180,6 +2233,7 @@
         if(s) s.value = val;
       });
       autoCheckAnswered('view-unit2');
+      updateMenuStatus(2, 'view-unit2');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
@@ -2591,6 +2645,7 @@
     });
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
     remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(3, 'view-unit3');
     setStatus('✓ Saved');
   }
 
@@ -2615,6 +2670,7 @@
         if(s) s.value = val;
       });
       autoCheckAnswered('view-unit3');
+      updateMenuStatus(3, 'view-unit3');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
@@ -3001,6 +3057,7 @@
     });
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
     remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(4, 'view-unit4');
     setStatus('✓ Saved');
   }
 
@@ -3034,6 +3091,7 @@
         if(s) s.value = val;
       });
       autoCheckAnswered('view-unit4');
+      updateMenuStatus(4, 'view-unit4');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
@@ -3059,6 +3117,429 @@
   });
   u4Root.addEventListener('click', (e) => {
     if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u4DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 5 ============ -->
+<div id="view-unit5" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 5 · Story Time</div>
+    <h1>The Last Leaf — by O. Henry</h1>
+    <p class="hero-desc">A short story about two young painters, a serious illness, and an old artist who finally gets the chance to make something that matters.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Before You Listen — Discuss</h2>
+    </div>
+    <p class="section-sub">Talk through each question before you open the story. There's no right answer here — just get your predictions and ideas out loud.</p>
+
+    <div class="manifest" id="u5-warmup"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Listen &amp; Read</h2>
+    </div>
+    <p class="section-sub">
+      Two young painters, Sue and Johnsy, share a small studio apartment in New York. When Johnsy falls seriously ill one winter, she becomes convinced that her life is somehow tied to an old ivy vine she can see from her bed — and that she won't survive once its last leaf falls. Sue does everything she can to keep her friend's spirits up, and turns for help to Behrman, the fierce old painter who lives downstairs and has spent his whole career failing to finish the "masterpiece" he always talks about. What happens on the night of the worst storm of the year changes everything — in a way none of the three of them expect.
+    </p>
+    <div class="article" style="text-align:center;">
+      <p style="margin: 0 0 14px; font-size:14px; color: var(--muted);">Open the story, read along, and press play — the full text and audio narration (about 9 minutes) are on this page:</p>
+      <a href="https://www.manythings.org/voa/stories/The_Last_Leaf-_By_O_Henry.html" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128214; Read the story ↗</a>
+      <a href="http://www.voanews.com/MediaAssets2/learningenglish/2010_12/se-as-the-last-leaf-04-dec-10.mp3" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128266; Listen to the audio ↗</a>
+      <p style="margin: 14px 0 0; font-size:12.5px; color: var(--muted);">While you listen: pay attention to what Johnsy believes about the leaves, and what Sue asks Behrman to do.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Vocabulary</h2>
+    </div>
+    <p class="section-sub">Match each word or expression from the story to its meaning.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u5-vocab"></div>
+      <button class="check-btn" id="u5-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Comprehension — True or False</h2>
+    </div>
+    <p class="section-sub">Decide if each statement about the story is true or false.</p>
+    <div class="exercise-card">
+      <div id="u5-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u5-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Put the Events in Order</h2>
+    </div>
+    <p class="section-sub">Number the events from 1 (first) to 6 (last), in the order they happen in the story.</p>
+    <div class="exercise-card">
+      <div id="u5-order" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u5-check-order" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">The Moral of the Story</h2>
+    </div>
+    <p class="section-sub">Choose the statement that best expresses the story's theme, then share your own view.</p>
+    <div class="exercise-card">
+      <div id="u5-theme" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u5-check-theme" type="button" style="margin-top:8px;">Check answer</button>
+    </div>
+    <div class="manifest" id="u5-reflection" style="margin-top:16px;"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Discussion</h2>
+    </div>
+    <p class="section-sub">Open questions to close out the unit — talk them through, and jot notes if it helps.</p>
+    <div class="manifest" id="u5-discussion"></div>
+  </section>
+
+  <footer>MANIFEST NO. 005 — UNIT 5: STORY TIME</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u5-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u5-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+            ${item.a ? '<button class="key-toggle" type="button">Answer key</button>' : ''}
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your thoughts, ideas, key vocabulary..."></textarea>
+          ${item.a ? `<div class="answer-key">${item.a}</div>` : ''}
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      const keyBtn = row.querySelector('.key-toggle');
+      if(keyBtn){
+        const key = row.querySelector('.answer-key');
+        keyBtn.addEventListener('click', () => {
+          key.classList.toggle('show');
+          keyBtn.textContent = key.classList.contains('show') ? 'Hide key' : 'Answer key';
+        });
+      }
+      el.appendChild(row);
+    });
+  }
+
+  // --- 01) Before You Listen ---
+  const warmup = [
+    { q: "Look at the title, “The Last Leaf.” What do you predict this story might be about?" },
+    { q: "Have you ever felt like giving up on something difficult? What — or who — helped you keep going?" },
+    { q: "Think of a time someone made a real sacrifice for a friend or teammate, without making a big deal of it. What happened?" }
+  ];
+  renderManifest('u5-warmup', warmup);
+
+  // --- 03) Vocabulary ---
+  const vocabDefs = [
+    "A serious lung infection that can make breathing difficult",
+    "A climbing plant that grows up walls or trees using its stems",
+    "A piece of strong cloth that a painter paints on",
+    "An artist's greatest or most important piece of work",
+    "A person who poses so an artist can draw or paint them",
+    "To decide something firmly and stop considering other options",
+    "Showing very strong, intense feeling or determination",
+    "No longer at risk of dying or getting seriously worse"
+  ];
+  const vocabData = [
+    { term: "Pneumonia", answer: "A serious lung infection that can make breathing difficult" },
+    { term: "Ivy vine", answer: "A climbing plant that grows up walls or trees using its stems" },
+    { term: "Canvas", answer: "A piece of strong cloth that a painter paints on" },
+    { term: "Masterpiece", answer: "An artist's greatest or most important piece of work" },
+    { term: "Model", answer: "A person who poses so an artist can draw or paint them" },
+    { term: "To make up one's mind", answer: "To decide something firmly and stop considering other options" },
+    { term: "Fierce", answer: "Showing very strong, intense feeling or determination" },
+    { term: "Out of danger", answer: "No longer at risk of dying or getting seriously worse" }
+  ];
+  const vocabEl = document.getElementById('u5-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:170px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u5-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u5-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 04) True or False ---
+  const tfData = [
+    { text: "Johnsy and Sue are both young painters who share a studio apartment.", correct: true },
+    { text: "Johnsy becomes seriously ill with a lung disease during the winter.", correct: true },
+    { text: "Johnsy believes she will get better as soon as the doctor gives her new medicine.", correct: false },
+    { text: "Sue tells the doctor that Johnsy is in love with a man, and that's what's troubling her.", correct: false },
+    { text: "Old Behrman is a very successful and famous painter.", correct: false },
+    { text: "Sue asks Behrman to pose as a model for one of her drawings.", correct: true },
+    { text: "After the storm, the last leaf on the vine has finally fallen.", correct: false },
+    { text: "It turns out that Behrman painted the last leaf himself, during the storm.", correct: true }
+  ];
+  const tfEl = document.getElementById('u5-tf');
+  tfData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.dataset.key = `u5-tf-${i}`;
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+      <button class="choice-btn" data-value="true" data-key="u5-tf-${i}" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" data-key="u5-tf-${i}" type="button" style="flex:0 1 100px;">False</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    tfEl.appendChild(row);
+  });
+  document.getElementById('u5-check-tf').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = tfEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- 05) Put in Order ---
+  const orderBank = ["1", "2", "3", "4", "5", "6"];
+  const orderData = [
+    { text: "Johnsy becomes seriously ill and stops trying to fight the disease.", answer: "1" },
+    { text: "Johnsy starts counting the leaves left on the vine outside her window.", answer: "2" },
+    { text: "Sue tells Behrman how worried she is about her friend.", answer: "3" },
+    { text: "A fierce storm blows through the city overnight.", answer: "4" },
+    { text: "Johnsy notices that one leaf is still on the vine the next morning.", answer: "5" },
+    { text: "Sue reveals that Behrman has died, and explains why.", answer: "6" }
+  ];
+  const orderEl = document.getElementById('u5-order');
+  const orderOptionsHtml = orderBank.map(n => `<option value="${n}">${n}</option>`).join('');
+  orderData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <select class="inline-select" data-answer="${item.answer}" data-key="u5-order-${i}" style="width:56px; flex:0 0 auto;">
+        <option value="">.</option>
+        ${orderOptionsHtml}
+      </select>
+      <span>${item.text}</span>
+    `;
+    orderEl.appendChild(row);
+  });
+  document.getElementById('u5-check-order').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = orderEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 06) The Moral of the Story ---
+  const themeOptions = [
+    { text: "Art is only valuable if it makes the artist famous.", correct: false },
+    { text: "A small act of sacrifice and hope can save someone's life.", correct: true },
+    { text: "It's best not to get too close to people who are seriously ill.", correct: false },
+    { text: "Painting is more important than friendship.", correct: false }
+  ];
+  const themeEl = document.getElementById('u5-theme');
+  themeOptions.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.type = 'button';
+    btn.style.flex = '0 0 auto';
+    btn.dataset.correct = opt.correct;
+    btn.dataset.key = `u5-theme-${i}`;
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      themeEl.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+      btn.classList.add('selected');
+    });
+    themeEl.appendChild(btn);
+  });
+  document.getElementById('u5-check-theme').addEventListener('click', (e) => {
+    let correctCount = 0;
+    themeEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = btn.classList.contains('selected');
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true') btn.classList.add('correct');
+      else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, 1);
+  });
+
+  const reflection = [
+    { q: "In your own opinion, what was Behrman's real masterpiece — and why?" }
+  ];
+  renderManifest('u5-reflection', reflection);
+
+  // --- 07) Discussion ---
+  const discussion = [
+    { q: "Why do you think Johnsy believed her life was connected to the leaves on the vine?" },
+    { q: "What does Behrman's choice tell you about his character, even though he seemed rough and unsuccessful?" },
+    { q: "Sue doesn't tell Johnsy the truth about the leaf until the very end. Do you agree with keeping that secret? Why or why not?" },
+    { q: "Have you ever seen someone quietly help a colleague or friend, without expecting any recognition for it? What happened?" }
+  ];
+  renderManifest('u5-discussion', discussion);
+
+  // --- Save / load answers (localStorage + Google Sheets, autosave) ---
+  const STORAGE_KEY = 'michel-unit5-answers';
+  const statusEl = document.getElementById('u5-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit5 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('#view-unit5 .choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
+      }
+    });
+    document.querySelectorAll('#view-unit5 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(5, 'view-unit5');
+    setStatus('✓ Saved');
+  }
+
+  async function loadAnswers(){
+    try{
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit5 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit5 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit5 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit5 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      autoCheckAnswered('view-unit5');
+      updateMenuStatus(5, 'view-unit5');
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u5-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u5Root = document.getElementById('view-unit5');
+  const u5DebouncedSave = debounce(saveAnswers, 700);
+  u5Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u5DebouncedSave();
+  });
+  u5Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u5Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u5DebouncedSave();
   });
 
   loadAnswers();
