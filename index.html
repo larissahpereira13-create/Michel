@@ -1863,10 +1863,11 @@
     const row = document.createElement('div');
     row.className = 'confuse-row';
     row.dataset.correct = item.correct;
+    row.dataset.key = `u2-tf-${i}`;
     row.innerHTML = `
       <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
-      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
-      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+      <button class="choice-btn" data-value="true" data-key="u2-tf-${i}" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" data-key="u2-tf-${i}" type="button" style="flex:0 1 100px;">False</button>
     `;
     row.querySelectorAll('.choice-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1913,13 +1914,14 @@
     optsWrap.style.display = 'flex';
     optsWrap.style.flexDirection = 'column';
     optsWrap.style.gap = '8px';
-    item.options.forEach(opt => {
+    item.options.forEach((opt, optIdx) => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.type = 'button';
       btn.style.flex = '0 0 auto';
       btn.dataset.correct = (opt === item.correct);
       btn.dataset.key = `u2-mcq-${i}`;
+      btn.dataset.value = String(optIdx);
       btn.textContent = opt;
       btn.addEventListener('click', () => {
         optsWrap.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
@@ -2133,7 +2135,7 @@
     if(selectedChoice) state.mainchoice = selectedChoice.dataset.key;
     document.querySelectorAll('.choice-btn[data-key]').forEach(btn => {
       if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
-        state.choices[btn.dataset.key] = true;
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
     document.querySelectorAll('select[data-key]').forEach(sel => {
@@ -2167,8 +2169,10 @@
         const b = mainChoiceEl.querySelector(`[data-key="${state.mainchoice}"]`);
         if(b) b.classList.add('selected');
       }
-      Object.keys(state.choices || {}).forEach(key => {
-        const b = document.querySelector(`.choice-btn[data-key="${key}"]`);
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`.choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`.choice-btn[data-key="${key}"]`);
         if(b) b.classList.add('selected');
       });
       Object.entries(state.selects || {}).forEach(([key, val]) => {
@@ -2370,10 +2374,11 @@
     const row = document.createElement('div');
     row.className = 'confuse-row';
     row.dataset.correct = item.correct;
+    row.dataset.key = `u3-tf-${i}`;
     row.innerHTML = `
       <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
-      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
-      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+      <button class="choice-btn" data-value="true" data-key="u3-tf-${i}" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" data-key="u3-tf-${i}" type="button" style="flex:0 1 100px;">False</button>
     `;
     row.querySelectorAll('.choice-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -2420,13 +2425,14 @@
     optsWrap.style.display = 'flex';
     optsWrap.style.flexDirection = 'column';
     optsWrap.style.gap = '8px';
-    item.options.forEach(opt => {
+    item.options.forEach((opt, optIdx) => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.type = 'button';
       btn.style.flex = '0 0 auto';
       btn.dataset.correct = (opt === item.correct);
       btn.dataset.key = `u3-mcq-${i}`;
+      btn.dataset.value = String(optIdx);
       btn.textContent = opt;
       btn.addEventListener('click', () => {
         optsWrap.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
@@ -2499,7 +2505,8 @@
     const row = document.createElement('div');
     row.className = 'confuse-row';
     row.dataset.correct = item.odd;
-    const wordsHtml = item.words.map(w => `<button class="choice-btn" data-value="${w}" type="button" style="flex:0 1 160px;">${w}</button>`).join('');
+    row.dataset.key = `u3-odd-${i}`;
+    const wordsHtml = item.words.map(w => `<button class="choice-btn" data-value="${w}" data-key="u3-odd-${i}" type="button" style="flex:0 1 160px;">${w}</button>`).join('');
     row.innerHTML = `
       <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. Which word doesn't belong?</span>
       ${wordsHtml}
@@ -2576,7 +2583,7 @@
     const state = { choices: {}, selects: {} };
     document.querySelectorAll('#view-unit3 .choice-btn[data-key]').forEach(btn => {
       if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
-        state.choices[btn.dataset.key] = true;
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
     document.querySelectorAll('#view-unit3 select[data-key]').forEach(sel => {
@@ -2597,8 +2604,10 @@
         if(!raw) return;
         state = JSON.parse(raw);
       }
-      Object.keys(state.choices || {}).forEach(key => {
-        const b = document.querySelector(`#view-unit3 .choice-btn[data-key="${key}"]`);
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit3 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit3 .choice-btn[data-key="${key}"]`);
         if(b) b.classList.add('selected');
       });
       Object.entries(state.selects || {}).forEach(([key, val]) => {
@@ -2858,10 +2867,11 @@
     const row = document.createElement('div');
     row.className = 'confuse-row';
     row.dataset.correct = item.correct;
+    row.dataset.key = `u4-tf-${i}`;
     row.innerHTML = `
       <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
-      <button class="choice-btn" data-value="true" type="button" style="flex:0 1 100px;">True</button>
-      <button class="choice-btn" data-value="false" type="button" style="flex:0 1 100px;">False</button>
+      <button class="choice-btn" data-value="true" data-key="u4-tf-${i}" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" data-key="u4-tf-${i}" type="button" style="flex:0 1 100px;">False</button>
     `;
     row.querySelectorAll('.choice-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -2983,7 +2993,7 @@
     });
     document.querySelectorAll('#view-unit4 .choice-btn[data-key]').forEach(btn => {
       if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
-        state.choices[btn.dataset.key] = true;
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
     document.querySelectorAll('#view-unit4 select[data-key]').forEach(sel => {
@@ -3013,8 +3023,10 @@
           if(btn) btn.textContent = '− Notes';
         }
       });
-      Object.keys(state.choices || {}).forEach(key => {
-        const b = document.querySelector(`#view-unit4 .choice-btn[data-key="${key}"]`);
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit4 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit4 .choice-btn[data-key="${key}"]`);
         if(b) b.classList.add('selected');
       });
       Object.entries(state.selects || {}).forEach(([key, val]) => {
