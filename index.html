@@ -829,6 +829,58 @@
       t = setTimeout(() => fn.apply(this, args), wait);
     };
   }
+
+  // --- Auto re-check exercises that already have a saved answer, so the
+  // score badge reappears right away after restoring saved progress ---
+  function exerciseHasAnswer(card){
+    if(!card) return false;
+    const sel = card.querySelectorAll('select');
+    for(const s of sel){ if(s.value) return true; }
+    if(card.querySelector('.choice-btn.selected, .choice-btn.correct, .choice-btn.incorrect')) return true;
+    if(card.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')) return true;
+    return false;
+  }
+  function autoCheckAnswered(rootId){
+    const root = document.getElementById(rootId);
+    if(!root) return;
+    root.querySelectorAll('.check-btn').forEach(btn => {
+      const card = btn.closest('.exercise-card') || btn.parentElement;
+      if(exerciseHasAnswer(card)) btn.click();
+    });
+  }
+
+  // --- Remote sync (Google Sheets, via Apps Script Web App) -----------------
+  // Paste the Web App URL you get after deploying the Apps Script here.
+  // Until you do, saving/loading silently falls back to this browser's
+  // localStorage only (same as before).
+  const REMOTE_SYNC_URL = 'https://script.google.com/macros/s/AKfycbwVxu7-sbNBShf4dbR3UN4CV_UU_JSJX_qPxV_8ByM__kLHUR8HlVn7mwBCmQRC7Hb0sg/exec';
+
+  function remoteEnabled(){
+    return REMOTE_SYNC_URL && REMOTE_SYNC_URL.indexOf('PASTE_') !== 0;
+  }
+
+  function remoteSave(unit, state){
+    if(!remoteEnabled()) return;
+    try{
+      fetch(REMOTE_SYNC_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ unit: unit, data: state })
+      }).catch(() => {});
+    }catch(err){}
+  }
+
+  async function remoteLoad(unit){
+    if(!remoteEnabled()) return null;
+    try{
+      const res = await fetch(REMOTE_SYNC_URL + '?unit=' + encodeURIComponent(unit), { method: 'GET' });
+      if(!res.ok) return null;
+      const json = await res.json();
+      return (json && json.data) ? json.data : null;
+    }catch(err){
+      return null;
+    }
+  }
 </script>
 
 <!-- ============ ACCESS GATE ============ -->
@@ -1470,19 +1522,21 @@
     document.querySelectorAll('select[data-key^="u1-wordsearch-"]').forEach(s => {
       if(s.value) state.wordsearch[s.dataset.key] = s.value;
     });
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      setStatus('✓ Saved — will be here next time you open this file');
-    }catch(err){
-      setStatus('Could not save in this browser');
-    }
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    setStatus('✓ Saved');
   }
 
-  function loadAnswers(){
+  async function loadAnswers(){
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const state = JSON.parse(raw);
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
 
       Object.entries(state.notes || {}).forEach(([key, val]) => {
         const t = document.querySelector(`textarea[data-key="${key}"]`);
@@ -1517,6 +1571,7 @@
         if(s) s.value = val;
       });
 
+      autoCheckAnswered('view-unit1');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable — ignore.
@@ -2084,19 +2139,21 @@
     document.querySelectorAll('select[data-key]').forEach(sel => {
       if(sel.value) state.selects[sel.dataset.key] = sel.value;
     });
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      setStatus('✓ Saved — will be here next time you open this file');
-    }catch(err){
-      setStatus('Could not save in this browser');
-    }
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    setStatus('✓ Saved');
   }
 
-  function loadAnswers(){
+  async function loadAnswers(){
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const state = JSON.parse(raw);
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
       Object.entries(state.notes || {}).forEach(([key, val]) => {
         const t = document.querySelector(`textarea[data-key="${key}"]`);
         if(t){
@@ -2118,6 +2175,7 @@
         const s = document.querySelector(`select[data-key="${key}"]`);
         if(s) s.value = val;
       });
+      autoCheckAnswered('view-unit2');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
@@ -2524,19 +2582,21 @@
     document.querySelectorAll('#view-unit3 select[data-key]').forEach(sel => {
       if(sel.value) state.selects[sel.dataset.key] = sel.value;
     });
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      setStatus('✓ Saved');
-    }catch(err){
-      setStatus('Could not save in this browser');
-    }
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    setStatus('✓ Saved');
   }
 
-  function loadAnswers(){
+  async function loadAnswers(){
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const state = JSON.parse(raw);
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
       Object.keys(state.choices || {}).forEach(key => {
         const b = document.querySelector(`#view-unit3 .choice-btn[data-key="${key}"]`);
         if(b) b.classList.add('selected');
@@ -2545,6 +2605,7 @@
         const s = document.querySelector(`#view-unit3 select[data-key="${key}"]`);
         if(s) s.value = val;
       });
+      autoCheckAnswered('view-unit3');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
@@ -2928,19 +2989,21 @@
     document.querySelectorAll('#view-unit4 select[data-key]').forEach(sel => {
       if(sel.value) state.selects[sel.dataset.key] = sel.value;
     });
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      setStatus('✓ Saved');
-    }catch(err){
-      setStatus('Could not save in this browser');
-    }
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    setStatus('✓ Saved');
   }
 
-  function loadAnswers(){
+  async function loadAnswers(){
     try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const state = JSON.parse(raw);
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
       Object.entries(state.notes || {}).forEach(([key, val]) => {
         const t = document.querySelector(`#view-unit4 textarea[data-key="${key}"]`);
         if(t){
@@ -2958,6 +3021,7 @@
         const s = document.querySelector(`#view-unit4 select[data-key="${key}"]`);
         if(s) s.value = val;
       });
+      autoCheckAnswered('view-unit4');
       setStatus('Loaded your saved answers');
     }catch(err){
       // Nothing saved yet, or storage unavailable.
