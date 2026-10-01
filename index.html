@@ -1031,6 +1031,18 @@
         </div>
         <div class="unit-arrow">&#8594;</div>
       </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit6')">
+        <div class="unit-num">06</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Story Time — "Luck"</p>
+            <span class="unit-status new" id="menu-status-6">New</span>
+          </div>
+          <p class="unit-desc">A short, ironic story by Mark Twain about luck, reputation and the truth no one wants to hear.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
     </div>
   </div>
 </div>
@@ -3540,6 +3552,428 @@
   });
   u5Root.addEventListener('click', (e) => {
     if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u5DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 6 ============ -->
+<div id="view-unit6" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 6 · Story Time</div>
+    <h1>Luck — by Mark Twain</h1>
+    <p class="hero-desc">A short, ironic story about a celebrated military hero — and the one man who knows the truth behind his fame.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Before You Listen — Discuss</h2>
+    </div>
+    <p class="section-sub">Talk through each question before you open the story.</p>
+
+    <div class="manifest" id="u6-warmup"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Listen &amp; Read</h2>
+    </div>
+    <p class="section-sub">
+      At a formal dinner, a guest is stunned to hear a clergyman describe a celebrated war hero, Lieutenant General Lord Arthur Scoresby, as "the most entire and absolute fool in the universe." The clergyman explains: he was Scoresby's teacher years earlier, at the military academy — and Scoresby was hopeless, getting almost everything wrong. Yet, again and again, pure chance turned his mistakes into triumphs, first in his exams, and later on the battlefield itself. As the story unfolds, one question stays with the listener: if nobody else can see the truth, does it even matter anymore?
+    </p>
+    <div class="article" style="text-align:center;">
+      <p style="margin: 0 0 14px; font-size:14px; color: var(--muted);">Open the story, read along, and press play — text and audio narration are on this page:</p>
+      <a href="https://www.manythings.org/voa/stories/Luck_-_By_Mark_Twain.html" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128214; Read the story ↗</a>
+      <a href="http://www.archive.org/download/AmericanStories/Luck_-_By_Mark_Twain.mp3" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128266; Listen to the audio ↗</a>
+      <p style="margin: 14px 0 0; font-size:12.5px; color: var(--muted);">While you listen: pay attention to the exam story and to what happens during the battle — both turn on the same idea.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Vocabulary</h2>
+    </div>
+    <p class="section-sub">Match each word or expression from the story to its meaning.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u6-vocab"></div>
+      <button class="check-btn" id="u6-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Comprehension — True or False</h2>
+    </div>
+    <p class="section-sub">Decide if each statement about the story is true or false.</p>
+    <div class="exercise-card">
+      <div id="u6-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u6-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Put the Events in Order</h2>
+    </div>
+    <p class="section-sub">Number the events from 1 (first) to 6 (last), in the order they happen in the story.</p>
+    <div class="exercise-card">
+      <div id="u6-order" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u6-check-order" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">The Moral of the Story</h2>
+    </div>
+    <p class="section-sub">Choose the statement that best expresses the story's theme, then share your own view.</p>
+    <div class="exercise-card">
+      <div id="u6-theme" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u6-check-theme" type="button" style="margin-top:8px;">Check answer</button>
+    </div>
+    <div class="manifest" id="u6-reflection" style="margin-top:16px;"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Discussion</h2>
+    </div>
+    <p class="section-sub">Open questions to close out the unit — talk them through, and jot notes if it helps.</p>
+    <div class="manifest" id="u6-discussion"></div>
+  </section>
+
+  <footer>MANIFEST NO. 006 — UNIT 6: STORY TIME</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u6-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u6-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+            ${item.a ? '<button class="key-toggle" type="button">Answer key</button>' : ''}
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your thoughts, ideas, key vocabulary..."></textarea>
+          ${item.a ? `<div class="answer-key">${item.a}</div>` : ''}
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      const keyBtn = row.querySelector('.key-toggle');
+      if(keyBtn){
+        const key = row.querySelector('.answer-key');
+        keyBtn.addEventListener('click', () => {
+          key.classList.toggle('show');
+          keyBtn.textContent = key.classList.contains('show') ? 'Hide key' : 'Answer key';
+        });
+      }
+      el.appendChild(row);
+    });
+  }
+
+  // --- 01) Before You Listen ---
+  const warmup = [
+    { q: "Do you believe people can become very successful through luck alone, without real skill? Can you think of an example?" },
+    { q: "Think of someone you know (or know of) who seems very successful — but you suspect they got lucky rather than skilled. What makes you think that?" },
+    { q: "What do you predict a story titled “Luck” might be about?" }
+  ];
+  renderManifest('u6-warmup', warmup);
+
+  // --- 03) Vocabulary ---
+  const vocabDefs = [
+    "A student at a military training school",
+    "A serious mistake, often an embarrassing one",
+    "The person who tests and grades a candidate's knowledge",
+    "Complete; total (used to emphasize something, e.g. 'sheer luck')",
+    "A great victory or success",
+    "A rank among the most senior officers in the army",
+    "To move around an enemy's side in order to attack from a stronger position",
+    "A person who is extremely foolish or lacks good judgment"
+  ];
+  const vocabData = [
+    { term: "Cadet", answer: "A student at a military training school" },
+    { term: "Blunder", answer: "A serious mistake, often an embarrassing one" },
+    { term: "Examiner", answer: "The person who tests and grades a candidate's knowledge" },
+    { term: "Sheer", answer: "Complete; total (used to emphasize something, e.g. 'sheer luck')" },
+    { term: "Triumph", answer: "A great victory or success" },
+    { term: "Lieutenant General", answer: "A rank among the most senior officers in the army" },
+    { term: "To outflank", answer: "To move around an enemy's side in order to attack from a stronger position" },
+    { term: "Fool", answer: "A person who is extremely foolish or lacks good judgment" }
+  ];
+  const vocabEl = document.getElementById('u6-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:170px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u6-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u6-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 04) True or False ---
+  const tfData = [
+    { text: "The story is told by General Scoresby himself, describing his own life.", correct: false },
+    { text: "As a young cadet, Scoresby was an excellent student who got almost everything right.", correct: false },
+    { text: "The narrator, Scoresby's old teacher, fears he will fail an important exam and secretly prepares him on one topic.", correct: true },
+    { text: "By coincidence, that exact topic turns out to be the main question on the exam, and Scoresby passes.", correct: true },
+    { text: "During the battle, Scoresby gives the exact right order on purpose, proving his real military talent.", correct: false },
+    { text: "Because of a lucky mistake in battle, Scoresby becomes a celebrated hero.", correct: true },
+    { text: "By the end of the story, the narrator is fully convinced that Scoresby deserves all his fame.", correct: false }
+  ];
+  const tfEl = document.getElementById('u6-tf');
+  tfData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'confuse-row';
+    row.dataset.correct = item.correct;
+    row.dataset.key = `u6-tf-${i}`;
+    row.innerHTML = `
+      <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+      <button class="choice-btn" data-value="true" data-key="u6-tf-${i}" type="button" style="flex:0 1 100px;">True</button>
+      <button class="choice-btn" data-value="false" data-key="u6-tf-${i}" type="button" style="flex:0 1 100px;">False</button>
+    `;
+    row.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+    });
+    tfEl.appendChild(row);
+  });
+  document.getElementById('u6-check-tf').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const rows = tfEl.querySelectorAll('.confuse-row');
+    rows.forEach(row => {
+      const correct = row.dataset.correct;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        if(!btn.classList.contains('selected')) return;
+        btn.classList.remove('selected');
+        const isCorrect = btn.dataset.value === correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if(isCorrect) correctCount++;
+      });
+    });
+    renderScore(e.currentTarget, correctCount, rows.length);
+  });
+
+  // --- 05) Put in Order ---
+  const orderBank = ["1", "2", "3", "4", "5", "6"];
+  const orderData = [
+    { text: "Scoresby struggles badly as a cadet at the military academy.", answer: "1" },
+    { text: "His teacher, fearing he'll fail, secretly coaches him on one specific topic before a big exam.", answer: "2" },
+    { text: "That exact topic appears on the exam, and Scoresby passes with top marks.", answer: "3" },
+    { text: "Years later, Scoresby leads troops into a real battle.", answer: "4" },
+    { text: "Confused, he gives the wrong order — but by chance, it defeats the enemy.", answer: "5" },
+    { text: "Scoresby is celebrated as a brilliant military hero.", answer: "6" }
+  ];
+  const orderEl = document.getElementById('u6-order');
+  const orderOptionsHtml = orderBank.map(n => `<option value="${n}">${n}</option>`).join('');
+  orderData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <select class="inline-select" data-answer="${item.answer}" data-key="u6-order-${i}" style="width:56px; flex:0 0 auto;">
+        <option value="">.</option>
+        ${orderOptionsHtml}
+      </select>
+      <span>${item.text}</span>
+    `;
+    orderEl.appendChild(row);
+  });
+  document.getElementById('u6-check-order').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = orderEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 06) The Moral of the Story ---
+  const themeOptions = [
+    { text: "Hard work and intelligence always lead to success.", correct: false },
+    { text: "Sometimes, people's success is based on luck, not real skill — and almost no one notices.", correct: true },
+    { text: "Military leaders are usually chosen based on pure chance.", correct: false },
+    { text: "Teachers should never help their struggling students.", correct: false }
+  ];
+  const themeEl = document.getElementById('u6-theme');
+  themeOptions.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.type = 'button';
+    btn.style.flex = '0 0 auto';
+    btn.dataset.correct = opt.correct;
+    btn.dataset.key = `u6-theme-${i}`;
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      themeEl.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+      btn.classList.add('selected');
+    });
+    themeEl.appendChild(btn);
+  });
+  document.getElementById('u6-check-theme').addEventListener('click', (e) => {
+    let correctCount = 0;
+    themeEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = btn.classList.contains('selected');
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true') btn.classList.add('correct');
+      else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, 1);
+  });
+
+  const reflection = [
+    { q: "The narrator says no one else would ever believe the truth about Scoresby. Why do you think people prefer the “hero” story over the truth?" }
+  ];
+  renderManifest('u6-reflection', reflection);
+
+  // --- 07) Discussion ---
+  const discussion = [
+    { q: "Have you ever seen someone get credit for a success that was mostly luck, not skill? What happened?" },
+    { q: "If you were the narrator, would you ever reveal the truth about Scoresby publicly? Why or why not?" },
+    { q: "In your own field, how do you tell the difference between a decision that worked because of good planning, and one that just worked out by luck?" },
+    { q: "What does this story suggest about how reputations are built, and how fragile the truth can be?" }
+  ];
+  renderManifest('u6-discussion', discussion);
+
+  // --- Save / load answers (localStorage + Google Sheets, autosave) ---
+  const STORAGE_KEY = 'michel-unit6-answers';
+  const statusEl = document.getElementById('u6-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit6 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('#view-unit6 .choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
+      }
+    });
+    document.querySelectorAll('#view-unit6 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(6, 'view-unit6');
+    setStatus('✓ Saved');
+  }
+
+  async function loadAnswers(){
+    try{
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit6 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit6 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit6 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit6 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      autoCheckAnswered('view-unit6');
+      updateMenuStatus(6, 'view-unit6');
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u6-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u6Root = document.getElementById('view-unit6');
+  const u6DebouncedSave = debounce(saveAnswers, 700);
+  u6Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u6DebouncedSave();
+  });
+  u6Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u6Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u6DebouncedSave();
   });
 
   loadAnswers();
