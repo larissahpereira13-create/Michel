@@ -1043,6 +1043,18 @@
         </div>
         <div class="unit-arrow">&#8594;</div>
       </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit7')">
+        <div class="unit-num">07</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Crisis Simulation — The Container</p>
+            <span class="unit-status new" id="menu-status-7">New</span>
+          </div>
+          <p class="unit-desc">An interactive decision game: you're the logistics manager. A shipment crisis is unfolding — what do you do?</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
     </div>
   </div>
 </div>
@@ -3976,6 +3988,496 @@
     if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u6DebouncedSave();
   });
 
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 7 ============ -->
+<div id="view-unit7" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 7 · Crisis Simulation</div>
+    <h1>The Container</h1>
+    <p class="hero-desc">You're the logistics manager. A shipment crisis is unfolding over one week. Every message needs a reply — and every reply has a cost. Takes about 15–20 minutes.</p>
+  </div>
+</header>
+
+<style>
+  .sim-wrap{ max-width: 720px; margin: 0 auto; }
+  .sim-meters{
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+    margin-bottom: 24px; position: sticky; top: 8px; z-index: 5;
+  }
+  .sim-meter{
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 10px 16px; text-align:center; flex: 1 1 140px;
+  }
+  .sim-meter-label{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:0.06em; text-transform:uppercase; color: var(--muted); }
+  .sim-meter-value{ font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size: 20px; margin-top: 2px; }
+  .sim-scene{ display:none; }
+  .sim-scene.active{ display:block; }
+  .sim-day{ font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing:0.08em; text-transform:uppercase; color: var(--teal); margin-bottom: 8px; }
+  .sim-message{
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.08); border-left: 3px solid var(--kraft);
+    border-radius: 12px; padding: 18px 20px; margin-bottom: 18px;
+  }
+  .sim-sender{ font-weight:700; font-size: 13.5px; margin-bottom: 6px; color: var(--kraft); }
+  .sim-text{ font-size: 15px; line-height: 1.55; margin: 0; }
+  .sim-options{ display:flex; flex-direction:column; gap: 10px; }
+  .sim-opt-btn{
+    text-align:left; background: var(--surface); border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px; padding: 14px 16px; font-family:'Plus Jakarta Sans', sans-serif;
+    font-size: 14.5px; color: var(--text); cursor:pointer; transition: border-color .15s, background .15s;
+  }
+  .sim-opt-btn:hover{ border-color: var(--teal); }
+  .sim-opt-btn:disabled{ opacity: 0.45; cursor: default; }
+  .sim-feedback{
+    margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+    background: rgba(94,234,212,0.08); border: 1px solid rgba(94,234,212,0.25);
+    font-size: 14px; line-height: 1.5; display:none;
+  }
+  .sim-feedback.show{ display:block; }
+  .sim-continue{ margin-top: 16px; display:none; }
+  .sim-continue.show{ display:inline-block; }
+  .sim-report-stat{ display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 14.5px; }
+  .sim-log-item{ font-size: 13.5px; color: var(--muted); padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+  .sim-ending-title{ font-family:'Plus Jakarta Sans', sans-serif; font-weight:800; font-size: 22px; margin: 0 0 8px; }
+</style>
+
+<div class="wrap">
+  <section class="section">
+    <div class="sim-wrap">
+
+      <div class="sim-meters" id="u7-meters">
+        <div class="sim-meter"><div class="sim-meter-label">&#128176; Cost Impact</div><div class="sim-meter-value" id="u7-meter-cost">$0</div></div>
+        <div class="sim-meter"><div class="sim-meter-label">&#129309; Client Trust</div><div class="sim-meter-value" id="u7-meter-trust">100%</div></div>
+        <div class="sim-meter"><div class="sim-meter-label">&#128101; Team Morale</div><div class="sim-meter-value" id="u7-meter-morale">100%</div></div>
+      </div>
+
+      <div id="u7-scenes"></div>
+
+    </div>
+  </section>
+
+  <section class="section" id="u7-wrapup-section" style="display:none;">
+    <div class="section-head">
+      <span class="section-num">&#9733;</span>
+      <h2 class="section-title">Debrief</h2>
+    </div>
+    <p class="section-sub">Now that the crisis is over, look back at your choices.</p>
+    <div class="manifest" id="u7-reflection"></div>
+
+    <div class="exercise-card" style="margin-top: 20px;">
+      <p class="q-text" style="margin-bottom:6px;">&#9999;&#65039; Final Task — Write It Up</p>
+      <p class="subsection-instr" style="margin-bottom:12px;">Your director wants a short written summary of the week. In 4–6 sentences, write the incident e-mail you'd actually send: what happened, the main decisions you made, and the outcome.</p>
+      <textarea class="notes show" data-key="u7-writing-task" style="min-height: 130px;" placeholder="Subject: Shipment delay — summary and resolution&#10;&#10;Hi [Director],&#10;..."></textarea>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 007 — UNIT 7: CRISIS SIMULATION</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u7-save-status">Progress saves automatically</span>
+  <button class="clear-btn" id="u7-clear-answers" type="button">Restart simulation</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your thoughts..."></textarea>
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      el.appendChild(row);
+    });
+  }
+
+  // --- The scenario: 5 decision points, each affecting 3 meters ---
+  const scenes = [
+    {
+      id: 's1', day: 'MONDAY · 8:02 AM',
+      sender: 'WhatsApp — Freight Forwarder',
+      text: "Heads up — dock workers at the port are planning a strike starting Wednesday. Your container is still 2 days out. Want me to look into alternatives now, or wait and see if it's resolved?",
+      options: [
+        { label: "Yes, check alternatives now — I don't want to risk it.", cost: -8, trust: 5, morale: 5,
+          feedback: "You spend a little now, but the team feels ready. Smart move — or an overreaction? Time will tell." },
+        { label: "Let's wait 24 hours and see if the strike is confirmed.", cost: 0, trust: 0, morale: -5,
+          feedback: "A cautious bet. It might save money — or cost you precious time if the strike is confirmed." },
+        { label: "Ignore it for now — strikes rarely actually happen.", cost: 0, trust: -10, morale: -10,
+          feedback: "You move on. The forwarder seemed a little surprised by how little you reacted." }
+      ]
+    },
+    {
+      id: 's2', day: 'WEDNESDAY · 11:40 AM',
+      sender: 'Email — Port Agent',
+      text: "Confirmed: all port operations are suspended due to the strike. Your container is stuck. Estimated delay: at least 5 days.",
+      options: [
+        { label: "Reroute via air freight — faster, but expensive.", cost: -22, trust: 15, morale: 0,
+          feedback: "Costly, but the shipment is moving again fast. Finance will ask questions later." },
+        { label: "Reroute via a nearby port by truck — cheaper, but +3 days.", cost: -8, trust: 5, morale: 5,
+          feedback: "A balanced call. It costs less, though the delay grows a little." },
+        { label: "Wait it out — the strike should end soon.", cost: 0, trust: -15, morale: -5,
+          feedback: "You hold your position. The clock keeps ticking, and so does everyone's patience." }
+      ]
+    },
+    {
+      id: 's3', day: 'THURSDAY · 4:15 PM',
+      sender: 'Email — Client (Nordic Retail Co.)',
+      text: "We haven't had an update on our order in 3 days. If this shipment doesn't arrive by Friday, we're reconsidering this contract.",
+      options: [
+        { label: "Call the client personally and explain the situation.", cost: 0, trust: 20, morale: 5,
+          feedback: "The call isn't easy, but the client appreciates hearing it from you directly." },
+        { label: "Send a short, formal email with an apology and new ETA.", cost: 0, trust: 5, morale: 0,
+          feedback: "Professional and quick — but a little distant, given how worried the client sounded." },
+        { label: "Don't respond yet — wait until you're more certain.", cost: 0, trust: -20, morale: -10,
+          feedback: "Silence stretches on. The client's trust is clearly wearing thin." }
+      ]
+    },
+    {
+      id: 's4', day: 'FRIDAY · 9:30 AM',
+      sender: 'Slack — Your Team',
+      text: "We're getting slammed with questions from sales about this shipment. Can you send us something we can share internally?",
+      options: [
+        { label: "Host a quick 15-minute call to align everyone.", cost: 0, trust: 5, morale: 15,
+          feedback: "The team leaves the call with a clear, shared picture. Morale visibly improves." },
+        { label: "Send a written summary by email.", cost: 0, trust: 0, morale: 5,
+          feedback: "Efficient and clear enough — though a few people still have follow-up questions." },
+        { label: "Tell them you're too busy right now and will update later.", cost: 0, trust: -5, morale: -15,
+          feedback: "The team is left to guess. Rumors start to fill the silence." }
+      ]
+    },
+    {
+      id: 's4b', day: 'FRIDAY · 3:00 PM',
+      sender: 'Email — Insurance Broker',
+      text: "Given the delay, you may be able to file a claim to recover some of the storage fees and spoilage risk. It means paperwork now, and it could take weeks to resolve.",
+      options: [
+        { label: "File the detailed claim yourself, right now.", cost: -5, trust: 0, morale: 0,
+          feedback: "Thorough, if time-consuming. It may pay off weeks from now." },
+        { label: "Skip it — not worth the hassle during a crisis.", cost: 15, trust: 0, morale: -5,
+          feedback: "One less thing on your plate today. You may regret it when the final bill arrives." },
+        { label: "Delegate it to a teammate so you can stay focused on the shipment.", cost: -3, trust: 0, morale: 10,
+          feedback: "Good call. The team member feels trusted with something that actually matters." }
+      ]
+    },
+    {
+      id: 's4c', day: 'SATURDAY · 10:20 AM',
+      sender: 'WhatsApp — Sales Colleague',
+      text: "Heads up — a competitor is already pitching our main client about taking over this order if we don't deliver by Friday. Should we offer them anything extra to stay on good terms?",
+      options: [
+        { label: "Offer free expedited shipping on their next order.", cost: -10, trust: 10, morale: 0,
+          feedback: "A generous gesture. It costs a little, but goodwill like this tends to last." },
+        { label: "Hold firm — no extra offers. Let the service speak for itself.", cost: 0, trust: -5, morale: 0,
+          feedback: "Risky, but it keeps your margins — and your principles — intact." },
+        { label: "Loop in sales to manage the relationship while you focus on logistics.", cost: 0, trust: 5, morale: 5,
+          feedback: "Smart division of labor. Everyone gets to play to their strength." }
+      ]
+    },
+    {
+      id: 's5', day: 'MONDAY (NEXT WEEK) · 8:00 AM',
+      sender: 'Call — Your Director',
+      text: "This needs to be resolved today, one way or another. What's your final call?",
+      options: [
+        { label: "Absorb the extra cost — prioritize this shipment above everything else.", cost: -18, trust: 15, morale: 5,
+          feedback: "An expensive call, but it closes the crisis cleanly and visibly." },
+        { label: "Split the shipment: deliver part now, the rest later.", cost: -8, trust: 5, morale: 0,
+          feedback: "A pragmatic middle ground — not perfect for anyone, but workable for everyone." },
+        { label: "Negotiate a discount with the client to offset the delay.", cost: 8, trust: -5, morale: 0,
+          feedback: "It softens the financial hit, but the client doesn't love being asked to accept less." }
+      ]
+    }
+  ];
+
+  const meters = { cost: 0, trust: 100, morale: 100 };
+  const log = [];
+  let currentIndex = 0;
+  let finished = false;
+
+  const scenesEl = document.getElementById('u7-scenes');
+  const costEl = document.getElementById('u7-meter-cost');
+  const trustEl = document.getElementById('u7-meter-trust');
+  const moraleEl = document.getElementById('u7-meter-morale');
+
+  function renderMeters(){
+    costEl.textContent = '$' + Math.abs(meters.cost * 1000).toLocaleString('en-US');
+    trustEl.textContent = Math.max(0, Math.min(100, meters.trust)) + '%';
+    moraleEl.textContent = Math.max(0, Math.min(100, meters.morale)) + '%';
+  }
+
+  function updateUnit7Badge(){
+    const badge = document.getElementById('menu-status-7');
+    if(!badge) return;
+    const answered = log.filter(Boolean).length;
+    badge.classList.remove('new','progress','done');
+    if(finished){
+      badge.classList.add('done');
+      badge.textContent = 'Complete';
+    }else if(answered > 0){
+      badge.classList.add('progress');
+      badge.textContent = 'In progress';
+    }else{
+      badge.classList.add('new');
+      badge.textContent = 'New';
+    }
+  }
+
+  function buildSceneCard(scene, sceneIndex){
+    const card = document.createElement('div');
+    card.className = 'sim-scene';
+    card.id = `u7-scene-${sceneIndex}`;
+    card.dataset.index = sceneIndex;
+
+    const optsHtml = scene.options.map((opt, i) =>
+      `<button class="sim-opt-btn" type="button" data-opt="${i}">${opt.label}</button>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="sim-day">${scene.day}</div>
+      <div class="sim-message">
+        <div class="sim-sender">${scene.sender}</div>
+        <p class="sim-text">${scene.text}</p>
+      </div>
+      <div class="sim-options">${optsHtml}</div>
+      <div class="sim-feedback" id="u7-feedback-${sceneIndex}"></div>
+      <button class="check-btn sim-continue" id="u7-continue-${sceneIndex}" type="button">Continue &#8594;</button>
+    `;
+
+    card.querySelectorAll('.sim-opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => chooseOption(scene, sceneIndex, Number(btn.dataset.opt)));
+    });
+
+    return card;
+  }
+
+  function chooseOption(scene, sceneIndex, optIndex){
+    const card = document.getElementById(`u7-scene-${sceneIndex}`);
+    if(card.dataset.answered === 'true') return;
+    card.dataset.answered = 'true';
+
+    const opt = scene.options[optIndex];
+    meters.cost += opt.cost;
+    meters.trust = Math.max(0, Math.min(100, meters.trust + opt.trust));
+    meters.morale = Math.max(0, Math.min(100, meters.morale + opt.morale));
+    renderMeters();
+
+    log[sceneIndex] = { day: scene.day, choice: opt.label, feedback: opt.feedback };
+
+    card.querySelectorAll('.sim-opt-btn').forEach((btn, i) => {
+      btn.disabled = true;
+      if(i === optIndex) btn.style.borderColor = 'var(--teal)';
+    });
+
+    const fb = document.getElementById(`u7-feedback-${sceneIndex}`);
+    fb.textContent = opt.feedback;
+    fb.classList.add('show');
+
+    const cont = document.getElementById(`u7-continue-${sceneIndex}`);
+    cont.classList.add('show');
+
+    saveState();
+  }
+
+  function goToScene(index){
+    document.querySelectorAll('.sim-scene').forEach(s => s.classList.remove('active'));
+    if(index < scenes.length){
+      currentIndex = index;
+      document.getElementById(`u7-scene-${index}`).classList.add('active');
+    }else{
+      renderEnding();
+    }
+    saveState();
+  }
+
+  function renderEnding(){
+    finished = true;
+    const card = document.createElement('div');
+    card.className = 'sim-scene active';
+    card.id = 'u7-scene-end';
+
+    let title, body;
+    if(meters.trust >= 85 && meters.morale >= 85){
+      title = "&#9989; Crisis Averted";
+      body = "You moved quickly, communicated honestly, and kept both your client and your team on your side. It wasn't free — but it rarely is.";
+    }else if(meters.trust >= 55 && meters.morale >= 55){
+      title = "&#9888;&#65039; Contained, But Costly";
+      body = "You got through it. The client is still with you and the team is still standing — but a few relationships took a hit along the way.";
+    }else{
+      title = "&#128165; Lessons Learned the Hard Way";
+      body = "The shipment eventually arrived, but trust and morale paid the price. Next time, speed of communication may matter more than speed of delivery.";
+    }
+
+    const logHtml = log.map(entry => `
+      <div class="sim-log-item"><strong>${entry.day}:</strong> ${entry.choice}</div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="sim-message" style="border-left-color: var(--teal);">
+        <h3 class="sim-ending-title">${title}</h3>
+        <p class="sim-text">${body}</p>
+      </div>
+      <div style="margin: 18px 0;">
+        <div class="sim-report-stat"><span>Total cost impact</span><strong>$${Math.abs(meters.cost * 1000).toLocaleString('en-US')}</strong></div>
+        <div class="sim-report-stat"><span>Final client trust</span><strong>${meters.trust}%</strong></div>
+        <div class="sim-report-stat"><span>Final team morale</span><strong>${meters.morale}%</strong></div>
+      </div>
+      <p class="sim-day" style="margin-top:20px;">YOUR DECISIONS</p>
+      ${logHtml}
+      <button class="check-btn" id="u7-restart" type="button" style="margin-top:20px;">&#8634; Play again</button>
+    `;
+    scenesEl.appendChild(card);
+
+    document.getElementById('u7-restart').addEventListener('click', resetSimulation);
+    document.getElementById('u7-wrapup-section').style.display = '';
+    updateUnit7Badge();
+  }
+
+  function resetSimulation(){
+    meters.cost = 0; meters.trust = 100; meters.morale = 100;
+    log.length = 0;
+    currentIndex = 0;
+    finished = false;
+    scenesEl.innerHTML = '';
+    document.getElementById('u7-wrapup-section').style.display = 'none';
+    renderMeters();
+    buildAllScenes();
+    goToScene(0);
+    saveState();
+  }
+
+  function buildAllScenes(){
+    scenes.forEach((scene, i) => {
+      scenesEl.appendChild(buildSceneCard(scene, i));
+      const cont = document.getElementById(`u7-continue-${i}`) || null;
+    });
+    // wire "Continue" buttons after all scenes exist
+    scenes.forEach((scene, i) => {
+      document.getElementById(`u7-continue-${i}`).addEventListener('click', () => goToScene(i + 1));
+    });
+  }
+
+  const reflection = [
+    { q: "Looking back at your decisions, what would you do differently — and why?" },
+    { q: "Which trade-off was hardest: cost, client trust, or team morale? Why?" },
+    { q: "Was there a moment where speed mattered more than being 100% certain? What happened?" }
+  ];
+  renderManifest('u7-reflection', reflection);
+
+  // --- Save / load progress (localStorage + Google Sheets, autosave) ---
+  const STORAGE_KEY = 'michel-unit7-answers';
+  const statusEl = document.getElementById('u7-save-status');
+
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Progress saves automatically'; }, 3500);
+  }
+
+  function saveState(){
+    const notes = {};
+    document.querySelectorAll('#view-unit7 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) notes[t.dataset.key] = t.value;
+    });
+    const state = { meters: {...meters}, log: [...log], currentIndex, finished, notes };
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    updateUnit7Badge();
+    setStatus('✓ Saved');
+  }
+
+  function saveAnswers(){ saveState(); }
+
+  async function loadAnswers(){
+    buildAllScenes();
+    try{
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw){ goToScene(0); updateUnit7Badge(); return; }
+        state = JSON.parse(raw);
+      }
+
+      Object.assign(meters, state.meters || {});
+      renderMeters();
+      (state.log || []).forEach((entry, i) => { if(entry) log[i] = entry; });
+
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit7 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+
+      // Replay each answered scene silently so the choice/feedback UI is restored
+      (state.log || []).forEach((entry, i) => {
+        if(!entry || !scenes[i]) return;
+        const optIndex = scenes[i].options.findIndex(o => o.label === entry.choice);
+        if(optIndex === -1) return;
+        const card = document.getElementById(`u7-scene-${i}`);
+        card.dataset.answered = 'true';
+        card.querySelectorAll('.sim-opt-btn').forEach((btn, bi) => {
+          btn.disabled = true;
+          if(bi === optIndex) btn.style.borderColor = 'var(--teal)';
+        });
+        const fb = document.getElementById(`u7-feedback-${i}`);
+        fb.textContent = entry.feedback;
+        fb.classList.add('show');
+        document.getElementById(`u7-continue-${i}`).classList.add('show');
+      });
+
+      if(state.finished){
+        document.querySelectorAll('.sim-scene').forEach(s => s.classList.remove('active'));
+        renderEnding();
+      }else{
+        goToScene(state.currentIndex || 0);
+      }
+      updateUnit7Badge();
+      setStatus('Resumed your saved progress');
+    }catch(err){
+      goToScene(0);
+    }
+  }
+
+  document.getElementById('u7-clear-answers').addEventListener('click', () => {
+    try{ localStorage.removeItem(STORAGE_KEY); }catch(err){}
+    resetSimulation();
+    setStatus('Simulation restarted');
+  });
+
+  const u7Root = document.getElementById('view-unit7');
+  const u7DebouncedSave = debounce(saveState, 700);
+  u7Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u7DebouncedSave();
+  });
+
+  renderMeters();
   loadAnswers();
 
 })();
