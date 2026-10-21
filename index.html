@@ -1055,6 +1055,18 @@
         </div>
         <div class="unit-arrow">&#8594;</div>
       </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit8')">
+        <div class="unit-num">08</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">Story Time — "An Occurrence at Owl Creek Bridge"</p>
+            <span class="unit-status new" id="menu-status-8">New</span>
+          </div>
+          <p class="unit-desc">A classic Civil War story by Ambrose Bierce with a famous twist — ending with a detective-style case file.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
     </div>
   </div>
 </div>
@@ -4478,6 +4490,433 @@
   });
 
   renderMeters();
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 8 ============ -->
+<div id="view-unit8" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 8 · Story Time</div>
+    <h1>An Occurrence at Owl Creek Bridge — by Ambrose Bierce</h1>
+    <p class="hero-desc">A man stands on a bridge with a rope around his neck. What happens in the next few seconds is one of the most famous twists in short-story history.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Before You Listen — Discuss</h2>
+    </div>
+    <p class="section-sub">Warm up with a few questions. No right answers — just ideas.</p>
+    <div class="manifest" id="u8-warmup"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Listen &amp; Read</h2>
+    </div>
+    <p class="section-sub">
+      It is the time of the American Civil War. On a railroad bridge in Alabama, a Southern farmer named Peyton Farquhar stands with his hands tied and a rope around his neck, surrounded by Northern soldiers who are waiting for the order to act. He is accused of trying to interfere with the army's use of the bridge. As the moment approaches, his mind starts to move in strange ways — and what he experiences next is not quite what it seems. Listen once without pausing, then read along and notice how time behaves in this story.
+    </p>
+    <div class="article" style="text-align:center;">
+      <p style="margin: 0 0 14px; font-size:14px; color: var(--muted);">Open the story, read along, and press play — text and audio narration are on this page:</p>
+      <a href="https://www.manythings.org/voa/stories/An_Occurrence_at_Owl_Creek_Bridge_-_By_Ambrose_Bierce.html" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128214; Read the story ↗</a>
+      <a href="http://www.archive.org/download/AmericanStories/An_Occurrence_at_Owl_Creek_Bridge_-_By_Ambrose_Bierce.mp3" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128266; Listen to the audio ↗</a>
+      <p style="margin: 14px 0 0; font-size:12.5px; color: var(--muted);">While you listen: how does the way Farquhar sees and hears things change? Keep track of anything that feels "too good to be true".</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Vocabulary</h2>
+    </div>
+    <p class="section-sub">Match each word to its meaning.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u8-vocab"></div>
+      <button class="check-btn" id="u8-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Comprehension — True or False</h2>
+    </div>
+    <p class="section-sub">Decide if each statement about the story is true or false.</p>
+    <div class="exercise-card">
+      <div id="u8-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u8-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Put the Events in Order</h2>
+    </div>
+    <p class="section-sub">Number the events from 1 (first) to 6 (last), in the order they appear in the story.</p>
+    <div class="exercise-card">
+      <div id="u8-order" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u8-check-order" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">The Big Idea</h2>
+    </div>
+    <p class="section-sub">Choose the statement that best captures what the story is really about, then share your view.</p>
+    <div class="exercise-card">
+      <div id="u8-theme" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button class="check-btn" id="u8-check-theme" type="button" style="margin-top:8px;">Check answer</button>
+    </div>
+    <div class="manifest" id="u8-reflection" style="margin-top:16px;"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">&#128269;</span>
+      <h2 class="section-title">Final Task — Case File: Real or Imagined?</h2>
+    </div>
+    <p class="section-sub">You are the detective. The last scene reveals that Farquhar's "escape" may not have happened the way he thought. Go through the evidence: for each clue, decide if it could happen in real life, or if it's a sign that it was all in his mind. Then close the case.</p>
+    <div class="exercise-card">
+      <p class="q-text" style="margin-bottom:10px;">&#128193; Evidence</p>
+      <div id="u8-clues" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u8-check-clues" type="button" style="margin-top:8px;">Check the evidence</button>
+    </div>
+    <div class="exercise-card" style="margin-top:18px;">
+      <p class="q-text" style="margin-bottom:6px;">&#9878;&#65039; Your Verdict</p>
+      <p class="subsection-instr" style="margin-bottom:12px;">Write your closing statement in 3–5 sentences, as if you were presenting the case. Use at least two pieces of evidence, and finish with this sentence: <em>"In my opinion, the real story is that…"</em></p>
+      <textarea class="notes show" data-key="u8-verdict" style="min-height: 130px;" placeholder="Ladies and gentlemen, the evidence shows that..."></textarea>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 008 — UNIT 8: STORY TIME</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u8-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u8-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your thoughts, ideas, key vocabulary..."></textarea>
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      el.appendChild(row);
+    });
+  }
+
+  // --- 01) Before You Listen ---
+  renderManifest('u8-warmup', [
+    { q: "Have you ever been in a moment — an accident, an emergency, a big decision — when time seemed to slow down? What was it like?" },
+    { q: "What do you think a person might think about in their very last moments? Memories? Hopes? Fears?" },
+    { q: "The title mentions a bridge and a creek. What kind of mood does that suggest to you?" }
+  ]);
+
+  // --- 03) Vocabulary ---
+  const vocabDefs = [
+    "A loop of rope used to hang someone",
+    "A soldier whose job is to stand guard",
+    "A large farm where crops are grown, often with many workers",
+    "The steady flow of water in one direction in a river",
+    "A soldier who is an expert at shooting from a distance",
+    "To move quickly out of the way of something",
+    "Extremely tired, with no energy left",
+    "Seeing or hearing something that is not really there"
+  ];
+  const vocabData = [
+    { term: "Noose", answer: vocabDefs[0] },
+    { term: "Sentinel", answer: vocabDefs[1] },
+    { term: "Plantation", answer: vocabDefs[2] },
+    { term: "Current", answer: vocabDefs[3] },
+    { term: "Sharpshooter", answer: vocabDefs[4] },
+    { term: "To dodge", answer: vocabDefs[5] },
+    { term: "Exhausted", answer: vocabDefs[6] },
+    { term: "Hallucination", answer: vocabDefs[7] }
+  ];
+  const vocabEl = document.getElementById('u8-vocab');
+  const vocabOptionsHtml = vocabDefs.map(d => `<option value="${d}">${d}</option>`).join('');
+  vocabData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <span class="match-word" style="width:170px;">${i+1}. ${item.term}</span>
+      <span class="match-arrow">→</span>
+      <select class="inline-select" data-answer="${item.answer}" data-key="u8-vocab-${i}" style="flex:1;">
+        <option value="">...</option>
+        ${vocabOptionsHtml}
+      </select>
+    `;
+    vocabEl.appendChild(row);
+  });
+  document.getElementById('u8-check-vocab').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = vocabEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // generic two-button row builder (True/False style)
+  function buildChoiceRows(containerId, prefix, data, labels, btnWidth){
+    const el = document.getElementById(containerId);
+    data.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'confuse-row';
+      row.dataset.correct = item.correct;
+      row.dataset.key = `${prefix}-${i}`;
+      row.innerHTML = `
+        <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+        <button class="choice-btn" data-value="${labels[0].value}" data-key="${prefix}-${i}" type="button" style="flex:0 1 ${btnWidth}px;">${labels[0].text}</button>
+        <button class="choice-btn" data-value="${labels[1].value}" data-key="${prefix}-${i}" type="button" style="flex:0 1 ${btnWidth}px;">${labels[1].text}</button>
+      `;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+          btn.classList.add('selected');
+        });
+      });
+      el.appendChild(row);
+    });
+    return el;
+  }
+  function wireCheck(buttonId, el){
+    document.getElementById(buttonId).addEventListener('click', (e) => {
+      let correctCount = 0;
+      const rows = el.querySelectorAll('.confuse-row');
+      rows.forEach(row => {
+        const correct = row.dataset.correct;
+        row.querySelectorAll('.choice-btn').forEach(btn => {
+          if(!btn.classList.contains('selected')) return;
+          btn.classList.remove('selected');
+          const isCorrect = btn.dataset.value === correct;
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+          if(isCorrect) correctCount++;
+        });
+      });
+      renderScore(e.currentTarget, correctCount, rows.length);
+    });
+  }
+
+  // --- 04) True or False ---
+  const tfEl = buildChoiceRows('u8-tf', 'u8-tf', [
+    { text: "The story takes place during the American Civil War.", correct: true },
+    { text: "Peyton Farquhar is a soldier in the Northern army.", correct: false },
+    { text: "Farquhar is accused of trying to interfere with the army's use of a bridge.", correct: true },
+    { text: "In his experience, the rope breaks and he falls into the river below.", correct: true },
+    { text: "While he swims away, the soldiers on the bridge do not try to stop him.", correct: false },
+    { text: "In the final scene, Farquhar is safe at home with his wife for the rest of his life.", correct: false },
+    { text: "The story ends with Farquhar's body hanging from the bridge.", correct: true }
+  ], [{value:'true', text:'True'}, {value:'false', text:'False'}], 100);
+  wireCheck('u8-check-tf', tfEl);
+
+  // --- 05) Put in Order ---
+  const orderData = [
+    { text: "Farquhar stands on the bridge with a rope around his neck.", answer: "1" },
+    { text: "He falls, and the rope seems to break.", answer: "2" },
+    { text: "Soldiers fire at him as he swims and tries to get away.", answer: "3" },
+    { text: "He reaches the shore and travels through the forest, desperate to get home.", answer: "4" },
+    { text: "He sees his wife waiting for him and runs to hold her.", answer: "5" },
+    { text: "The truth is revealed: his body is hanging from the bridge.", answer: "6" }
+  ];
+  const orderEl = document.getElementById('u8-order');
+  const orderOptionsHtml = ["1","2","3","4","5","6"].map(n => `<option value="${n}">${n}</option>`).join('');
+  orderData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <select class="inline-select" data-answer="${item.answer}" data-key="u8-order-${i}" style="width:56px; flex:0 0 auto;">
+        <option value="">.</option>
+        ${orderOptionsHtml}
+      </select>
+      <span>${item.text}</span>
+    `;
+    orderEl.appendChild(row);
+  });
+  document.getElementById('u8-check-order').addEventListener('click', (e) => {
+    let correctCount = 0;
+    const sels = orderEl.querySelectorAll('select');
+    sels.forEach(sel => {
+      sel.classList.remove('correct','incorrect');
+      if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+      else if(sel.value !== '') sel.classList.add('incorrect');
+    });
+    renderScore(e.currentTarget, correctCount, sels.length);
+  });
+
+  // --- 06) The Big Idea ---
+  const themeOptions = [
+    { text: "Soldiers should never be trusted to follow orders.", correct: false },
+    { text: "In our last moments, the mind can build a whole “reality” — and it can be hard to tell what is real and what is imagined.", correct: true },
+    { text: "It is always possible to escape if you act quickly enough.", correct: false },
+    { text: "A bridge is the safest place to hide during a war.", correct: false }
+  ];
+  const themeEl = document.getElementById('u8-theme');
+  themeOptions.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.type = 'button';
+    btn.style.flex = '0 0 auto';
+    btn.dataset.correct = opt.correct;
+    btn.dataset.key = `u8-theme-${i}`;
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      themeEl.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+      btn.classList.add('selected');
+    });
+    themeEl.appendChild(btn);
+  });
+  document.getElementById('u8-check-theme').addEventListener('click', (e) => {
+    let correctCount = 0;
+    themeEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = btn.classList.contains('selected');
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true') btn.classList.add('correct');
+      else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, 1);
+  });
+  renderManifest('u8-reflection', [
+    { q: "Did you see the ending coming? Which moment in the story felt strange to you while you were listening?" }
+  ]);
+
+  // --- 07) Final Task: Case File ---
+  const cluesEl = buildChoiceRows('u8-clues', 'u8-clue', [
+    { text: "Farquhar frees his tied hands underwater with surprising ease.", correct: 'imagined' },
+    { text: "Many soldiers fire at him from close range, and he is not hit.", correct: 'imagined' },
+    { text: "His senses become extremely sharp: he notices tiny details, like individual leaves and insects, from far away.", correct: 'imagined' },
+    { text: "After being hanged, his neck is in terrible pain and his body feels strange and swollen.", correct: 'real' },
+    { text: "Sounds seem to slow down and stretch, as if time itself were changing.", correct: 'imagined' },
+    { text: "He is thirsty, tired and hungry after struggling to get away.", correct: 'real' },
+    { text: "A long journey home takes only a few moments in real time.", correct: 'imagined' },
+    { text: "Soldiers on a bridge are guarding the area and giving orders.", correct: 'real' }
+  ], [{value:'real', text:'Could really happen'}, {value:'imagined', text:'Sign it’s imagined'}], 200);
+  wireCheck('u8-check-clues', cluesEl);
+
+  // --- Save / load answers (localStorage + Google Sheets, autosave) ---
+  const STORAGE_KEY = 'michel-unit8-answers';
+  const statusEl = document.getElementById('u8-save-status');
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit8 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('#view-unit8 .choice-btn[data-key]').forEach(btn => {
+      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
+      }
+    });
+    document.querySelectorAll('#view-unit8 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(8, 'view-unit8');
+    setStatus('✓ Saved');
+  }
+
+  async function loadAnswers(){
+    try{
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit8 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit8 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit8 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit8 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      autoCheckAnswered('view-unit8');
+      updateMenuStatus(8, 'view-unit8');
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u8-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u8Root = document.getElementById('view-unit8');
+  const u8DebouncedSave = debounce(saveAnswers, 700);
+  u8Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u8DebouncedSave();
+  });
+  u8Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u8Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u8DebouncedSave();
+  });
+
   loadAnswers();
 
 })();
