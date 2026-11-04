@@ -811,6 +811,12 @@
 <body>
 
 <script>
+  // A choice button counts as "chosen" if the student picked it. The correct option
+  // that is only *revealed* after "Check answers" (data-revealed) is NOT a choice.
+  function isChosenBtn(btn){
+    return btn.classList.contains('selected') || btn.classList.contains('incorrect') ||
+           (btn.classList.contains('correct') && btn.dataset.revealed !== '1');
+  }
   function renderScore(btn, correct, total){
     let badge = btn.nextElementSibling;
     if(!badge || !badge.classList || !badge.classList.contains('score-badge')){
@@ -837,7 +843,7 @@
     if(!card) return false;
     const sel = card.querySelectorAll('select');
     for(const s of sel){ if(s.value) return true; }
-    if(card.querySelector('.choice-btn.selected, .choice-btn.correct, .choice-btn.incorrect')) return true;
+    if(Array.from(card.querySelectorAll('.choice-btn')).some(isChosenBtn)) return true;
     if(card.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')) return true;
     return false;
   }
@@ -870,7 +876,7 @@
     groupKeys.forEach(key => {
       total++;
       const group = root.querySelectorAll(`.choice-btn[data-key="${key}"]`);
-      const hasAnswer = Array.from(group).some(b => b.classList.contains('selected') || b.classList.contains('correct') || b.classList.contains('incorrect'));
+      const hasAnswer = Array.from(group).some(isChosenBtn);
       if(hasAnswer) answered++;
     });
 
@@ -1064,6 +1070,18 @@
             <span class="unit-status new" id="menu-status-8">New</span>
           </div>
           <p class="unit-desc">A classic Civil War story by Ambrose Bierce with a famous twist — ending with a detective-style case file.</p>
+        </div>
+        <div class="unit-arrow">&#8594;</div>
+      </button>
+
+      <button class="unit-card" type="button" onclick="showView('view-unit9')">
+        <div class="unit-num">09</div>
+        <div class="unit-body">
+          <div class="unit-title-row">
+            <p class="unit-title">News Listening — Tariffs: Rewiring Global Trade</p>
+            <span class="unit-status new" id="menu-status-9">New</span>
+          </div>
+          <p class="unit-desc">A real business-news audio on how tariffs are hitting supply chains — listening, vocabulary and a 60-second briefing.</p>
         </div>
         <div class="unit-arrow">&#8594;</div>
       </button>
@@ -2023,10 +2041,12 @@
   document.getElementById('u2-check-mcq').addEventListener('click', (e) => {
     let correctCount = 0;
     mcqEl.querySelectorAll('.choice-btn').forEach(btn => {
-      const isSelected = btn.classList.contains('selected');
+      const isSelected = isChosenBtn(btn);
       btn.classList.remove('selected');
-      if(btn.dataset.correct === 'true') btn.classList.add('correct');
-      else if(isSelected) btn.classList.add('incorrect');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
       if(isSelected && btn.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, mcqData.length);
@@ -2167,10 +2187,12 @@
   document.getElementById('u2-check-mainchoice').addEventListener('click', (e) => {
     let correctCount = 0;
     mainChoiceEl.querySelectorAll('.choice-btn').forEach(b => {
-      const isSelected = b.classList.contains('selected');
+      const isSelected = isChosenBtn(b);
       b.classList.remove('selected');
-      if(b.dataset.correct === 'true') b.classList.add('correct');
-      else if(isSelected) b.classList.add('incorrect');
+      if(b.dataset.correct === 'true'){
+        b.classList.add('correct');
+        if(isSelected) delete b.dataset.revealed; else b.dataset.revealed = '1';
+      }else if(isSelected) b.classList.add('incorrect');
       if(isSelected && b.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, 1);
@@ -2219,10 +2241,10 @@
     document.querySelectorAll('textarea.notes[data-key]').forEach(t => {
       if(t.value.trim()) state.notes[t.dataset.key] = t.value;
     });
-    const selectedChoice = mainChoiceEl.querySelector('.choice-btn.selected, .choice-btn.correct, .choice-btn.incorrect');
+    const selectedChoice = Array.from(mainChoiceEl.querySelectorAll('.choice-btn')).find(isChosenBtn);
     if(selectedChoice) state.mainchoice = selectedChoice.dataset.key;
     document.querySelectorAll('.choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -2536,10 +2558,12 @@
   document.getElementById('u3-check-mcq').addEventListener('click', (e) => {
     let correctCount = 0;
     mcqEl.querySelectorAll('.choice-btn').forEach(btn => {
-      const isSelected = btn.classList.contains('selected');
+      const isSelected = isChosenBtn(btn);
       btn.classList.remove('selected');
-      if(btn.dataset.correct === 'true') btn.classList.add('correct');
-      else if(isSelected) btn.classList.add('incorrect');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
       if(isSelected && btn.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, mcqData.length);
@@ -2672,7 +2696,7 @@
   function saveAnswers(){
     const state = { choices: {}, selects: {} };
     document.querySelectorAll('#view-unit3 .choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -3084,7 +3108,7 @@
       if(t.value.trim()) state.notes[t.dataset.key] = t.value;
     });
     document.querySelectorAll('#view-unit4 .choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -3469,10 +3493,12 @@
   document.getElementById('u5-check-theme').addEventListener('click', (e) => {
     let correctCount = 0;
     themeEl.querySelectorAll('.choice-btn').forEach(btn => {
-      const isSelected = btn.classList.contains('selected');
+      const isSelected = isChosenBtn(btn);
       btn.classList.remove('selected');
-      if(btn.dataset.correct === 'true') btn.classList.add('correct');
-      else if(isSelected) btn.classList.add('incorrect');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
       if(isSelected && btn.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, 1);
@@ -3507,7 +3533,7 @@
       if(t.value.trim()) state.notes[t.dataset.key] = t.value;
     });
     document.querySelectorAll('#view-unit5 .choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -3891,10 +3917,12 @@
   document.getElementById('u6-check-theme').addEventListener('click', (e) => {
     let correctCount = 0;
     themeEl.querySelectorAll('.choice-btn').forEach(btn => {
-      const isSelected = btn.classList.contains('selected');
+      const isSelected = isChosenBtn(btn);
       btn.classList.remove('selected');
-      if(btn.dataset.correct === 'true') btn.classList.add('correct');
-      else if(isSelected) btn.classList.add('incorrect');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
       if(isSelected && btn.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, 1);
@@ -3929,7 +3957,7 @@
       if(t.value.trim()) state.notes[t.dataset.key] = t.value;
     });
     document.querySelectorAll('#view-unit6 .choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -4807,10 +4835,12 @@
   document.getElementById('u8-check-theme').addEventListener('click', (e) => {
     let correctCount = 0;
     themeEl.querySelectorAll('.choice-btn').forEach(btn => {
-      const isSelected = btn.classList.contains('selected');
+      const isSelected = isChosenBtn(btn);
       btn.classList.remove('selected');
-      if(btn.dataset.correct === 'true') btn.classList.add('correct');
-      else if(isSelected) btn.classList.add('incorrect');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
       if(isSelected && btn.dataset.correct === 'true') correctCount++;
     });
     renderScore(e.currentTarget, correctCount, 1);
@@ -4846,7 +4876,7 @@
       if(t.value.trim()) state.notes[t.dataset.key] = t.value;
     });
     document.querySelectorAll('#view-unit8 .choice-btn[data-key]').forEach(btn => {
-      if(btn.classList.contains('selected') || btn.classList.contains('correct') || btn.classList.contains('incorrect')){
+      if(isChosenBtn(btn)){
         state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
       }
     });
@@ -4915,6 +4945,482 @@
   });
   u8Root.addEventListener('click', (e) => {
     if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u8DebouncedSave();
+  });
+
+  loadAnswers();
+
+})();
+</script>
+
+</div>
+
+<!-- ============ UNIT 9 ============ -->
+<div id="view-unit9" class="view">
+  <div class="back-bar">
+    <button class="back-btn" type="button" onclick="showView('view-menu')">&#8592; All units</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Unit 9 · News Listening</div>
+    <h1>Tariffs: Rewiring Global Trade</h1>
+    <p class="hero-desc">A business-news report on how new US tariffs are shaking global supply chains. Real audio, real business English — and a topic you work with every day.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Warm-up — Discuss</h2>
+    </div>
+    <p class="section-sub">Before you listen, talk through these questions.</p>
+    <div class="manifest" id="u9-warmup"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Listen</h2>
+    </div>
+    <p class="section-sub">
+      This news report from Business English Pod (episode BEN 60) looks at how the tariffs announced by the US administration are affecting trade, supply chains, financial markets and other countries' responses. First, listen once without reading. Then listen again with the transcript open. <strong>Important:</strong> the report is from August 2025, so every figure below is "according to the report" and may have changed since.
+    </p>
+    <div class="article" style="text-align:center;">
+      <p style="margin: 0 0 14px; font-size:14px; color: var(--muted);">Press play (opens in a new tab), and keep the transcript handy for the second listen:</p>
+      <a href="https://traffic.libsyn.com/secure/bizpod/BEN60-Tariffs.mp3" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128266; Listen to the audio ↗</a>
+      <a href="https://www.businessenglishpod.com/quiz/BEN60SN-Tariffs.pdf" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#128196; Open the transcript (PDF) ↗</a>
+      <a href="https://www.businessenglishpod.com/2025/08/17/business-english-news-60-tariffs-rewiring-global-trade/" target="_blank" rel="noopener" class="check-btn" style="display:inline-block; text-decoration:none; margin: 4px 8px;">&#127760; Lesson page ↗</a>
+      <p style="margin: 14px 0 0; font-size:12.5px; color: var(--muted);">Source: Business English Pod. While you listen, note the numbers, the countries mentioned, and what the report says about supply chains.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Listening — True or False</h2>
+    </div>
+    <p class="section-sub">According to the report, are these statements true or false? Answer from memory first, then check the transcript.</p>
+    <div class="exercise-card">
+      <div id="u9-tf" style="display:flex; flex-direction:column; gap:14px;"></div>
+      <button class="check-btn" id="u9-check-tf" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Listening — Multiple Choice</h2>
+    </div>
+    <p class="section-sub">Choose the best answer for each question.</p>
+    <div class="exercise-card">
+      <div id="u9-mcq" style="display:flex; flex-direction:column; gap:18px;"></div>
+      <button class="check-btn" id="u9-check-mcq" type="button" style="margin-top:8px;">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Complete the Sentences</h2>
+    </div>
+    <p class="section-sub">Choose a word from the list for each gap. Each word is used once.</p>
+    <div class="exercise-card">
+      <div id="u9-fill"></div>
+      <button class="check-btn" id="u9-check-fill" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Vocabulary</h2>
+    </div>
+    <p class="section-sub">Match each term from the report to its meaning.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u9-vocab"></div>
+      <button class="check-btn" id="u9-check-vocab" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Word Partnerships</h2>
+    </div>
+    <p class="section-sub">Complete the business collocations used in the report.</p>
+    <div class="exercise-card">
+      <div class="match-grid" id="u9-colloc"></div>
+      <button class="check-btn" id="u9-check-colloc" type="button">Check answers</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Discussion</h2>
+    </div>
+    <p class="section-sub">Connect the report to your own work.</p>
+    <div class="manifest" id="u9-discussion"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">&#127908;</span>
+      <h2 class="section-title">Final Task — Your 60-Second Briefing</h2>
+    </div>
+    <p class="section-sub">Your director asks: <em>"What do these tariffs mean for our supply chain?"</em> Prepare a 60-second spoken briefing. Write your notes below, then practise saying it out loud (or record it on your phone).</p>
+    <div class="exercise-card">
+      <p class="subsection-instr" style="margin-bottom:10px;">Include: &#9312; the situation in one sentence &nbsp; &#9313; two effects on supply chains &nbsp; &#9314; one risk &nbsp; &#9315; your recommendation. Try to use at least <strong>four</strong> words from the vocabulary exercises.</p>
+      <textarea class="notes show" data-key="u9-briefing" style="min-height: 150px;" placeholder="Good morning. In short, the new tariffs mean that..."></textarea>
+    </div>
+    <div class="exercise-card" style="margin-top:18px;">
+      <p class="q-text" style="margin-bottom:6px;">&#128257; Shadowing (optional)</p>
+      <p class="subsection-instr" style="margin-bottom:0;">Pick one sentence from the transcript that you liked. Listen to it three times, then say it out loud copying the rhythm and stress. Write the sentence you chose here:</p>
+      <textarea class="notes show" data-key="u9-shadowing" style="min-height: 70px;" placeholder="The sentence I practised was..."></textarea>
+    </div>
+  </section>
+
+  <footer>MANIFEST NO. 009 — UNIT 9: NEWS LISTENING</footer>
+</div>
+
+<div class="save-bar">
+  <span class="save-status" id="u9-save-status">Answers save automatically</span>
+  <button class="clear-btn" id="u9-clear-answers" type="button">Clear saved</button>
+</div>
+
+<script>
+(function(){
+
+  function renderManifest(containerId, list){
+    const el = document.getElementById(containerId);
+    list.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'q-item';
+      row.innerHTML = `
+        <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="q-body">
+          <p class="q-text">${item.q}</p>
+          <div class="q-actions">
+            <button class="q-toggle" type="button">+ Notes</button>
+          </div>
+          <textarea class="notes" data-key="notes-${containerId}-${i}" placeholder="Your thoughts, ideas, key vocabulary..."></textarea>
+        </div>
+      `;
+      const btn = row.querySelector('.q-toggle');
+      const notes = row.querySelector('.notes');
+      btn.addEventListener('click', () => {
+        notes.classList.toggle('show');
+        btn.textContent = notes.classList.contains('show') ? '− Notes' : '+ Notes';
+      });
+      el.appendChild(row);
+    });
+  }
+
+  // --- 01) Warm-up ---
+  renderManifest('u9-warmup', [
+    { q: "When a government raises import taxes (tariffs), who is affected first in a supply chain? And who ends up paying in the end?" },
+    { q: "Have new rules, taxes or border delays ever disrupted a shipment or a supplier relationship in your own work? What did you do?" },
+    { q: "What does “just-in-time” mean to you? Why might unpredictable trade rules make it risky?" }
+  ]);
+
+  // --- shared builders ---
+  function buildChoiceRows(containerId, prefix, data, labels, btnWidth){
+    const el = document.getElementById(containerId);
+    data.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'confuse-row';
+      row.dataset.correct = item.correct;
+      row.dataset.key = `${prefix}-${i}`;
+      row.innerHTML = `
+        <span class="confuse-word" style="width:auto; flex:1 1 100%; font-weight:500; margin-bottom:2px;">${i+1}. ${item.text}</span>
+        <button class="choice-btn" data-value="${labels[0].value}" data-key="${prefix}-${i}" type="button" style="flex:0 1 ${btnWidth}px;">${labels[0].text}</button>
+        <button class="choice-btn" data-value="${labels[1].value}" data-key="${prefix}-${i}" type="button" style="flex:0 1 ${btnWidth}px;">${labels[1].text}</button>
+      `;
+      row.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+          btn.classList.add('selected');
+        });
+      });
+      el.appendChild(row);
+    });
+    return el;
+  }
+  function wireCheck(buttonId, el){
+    document.getElementById(buttonId).addEventListener('click', (e) => {
+      let correctCount = 0;
+      const rows = el.querySelectorAll('.confuse-row');
+      rows.forEach(row => {
+        const correct = row.dataset.correct;
+        row.querySelectorAll('.choice-btn').forEach(btn => {
+          if(!btn.classList.contains('selected')) return;
+          btn.classList.remove('selected');
+          const isCorrect = btn.dataset.value === correct;
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+          if(isCorrect) correctCount++;
+        });
+      });
+      renderScore(e.currentTarget, correctCount, rows.length);
+    });
+  }
+  function buildSelectRows(containerId, prefix, data, optionsList, wordWidth){
+    const el = document.getElementById(containerId);
+    const optionsHtml = optionsList.map(d => `<option value="${d}">${d}</option>`).join('');
+    data.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'match-row';
+      row.innerHTML = `
+        <span class="match-word" style="width:${wordWidth}px;">${i+1}. ${item.term}</span>
+        <span class="match-arrow">→</span>
+        <select class="inline-select" data-answer="${item.answer}" data-key="${prefix}-${i}" style="flex:1;">
+          <option value="">...</option>
+          ${optionsHtml}
+        </select>
+      `;
+      el.appendChild(row);
+    });
+    return el;
+  }
+  function wireSelectCheck(buttonId, el){
+    document.getElementById(buttonId).addEventListener('click', (e) => {
+      let correctCount = 0;
+      const sels = el.querySelectorAll('select');
+      sels.forEach(sel => {
+        sel.classList.remove('correct','incorrect');
+        if(sel.value === sel.dataset.answer){ sel.classList.add('correct'); correctCount++; }
+        else if(sel.value !== '') sel.classList.add('incorrect');
+      });
+      renderScore(e.currentTarget, correctCount, sels.length);
+    });
+  }
+
+  // --- 03) True or False (according to the report) ---
+  const tfEl = buildChoiceRows('u9-tf', 'u9-tf', [
+    { text: "According to the report, US tariffs have reached their highest level since the 1930s.", correct: true },
+    { text: "The average tariff rate is about 17%, applied to nearly 45% of all imports.", correct: true },
+    { text: "The new tariffs announced on India are 50%.", correct: false },
+    { text: "Analysts say the framework deals with the EU and Japan are strong enough to offset rising costs.", correct: false },
+    { text: "Tariffs have made demand forecasting and inventory planning more difficult.", correct: true },
+    { text: "The report says unpredictability supports just-in-time ordering.", correct: false },
+    { text: "Analysts estimate the tariffs will subtract roughly one percentage point from China’s GDP growth.", correct: true },
+    { text: "Japan’s Prime Minister welcomed the new measures without any concerns.", correct: false }
+  ], [{value:'true', text:'True'}, {value:'false', text:'False'}], 100);
+  wireCheck('u9-check-tf', tfEl);
+
+  // --- 04) Multiple choice ---
+  const mcqData = [
+    { q: "What does the report say about just-in-time ordering?",
+      options: ["Companies are adopting it faster than ever", "Unpredictability undermines it, so firms are rethinking lean inventory", "It is not affected by the tariffs", "The WTO has banned it"], correct: 1 },
+    { q: "Which of these is NOT mentioned as a result of the disruption to supply chains?",
+      options: ["Higher operational costs", "Longer lead times", "Lower efficiency in manufacturing and logistics", "Faster delivery to customers"], correct: 3 },
+    { q: "What did JPMorgan warn about?",
+      options: ["The shock to sentiment and capital flows will likely last", "Tariffs will disappear within a few weeks", "Emerging currencies will become much stronger", "The US trade deficit will double"], correct: 0 },
+    { q: "How did China’s commerce ministry respond?",
+      options: ["It welcomed the framework deals", "It promised countermeasures to protect its rights and interests", "It asked the US to raise tariffs further", "It did not comment"], correct: 1 },
+    { q: "What did the Chatham House comment say about the WTO?",
+      options: ["The WTO works perfectly and needs no change", "Only the US is frustrated by the WTO", "Many countries are frustrated by its inability to control state subsidies, and a new approach is needed", "The WTO should be closed immediately"], correct: 2 }
+  ];
+  const mcqEl = document.getElementById('u9-mcq');
+  mcqData.forEach((item, i) => {
+    const block = document.createElement('div');
+    block.innerHTML = `<p class="q-text" style="margin-bottom:8px;">${i+1}. ${item.q}</p>`;
+    const optsWrap = document.createElement('div');
+    optsWrap.style.display = 'flex';
+    optsWrap.style.flexDirection = 'column';
+    optsWrap.style.gap = '8px';
+    item.options.forEach((opt, optIdx) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.type = 'button';
+      btn.style.flex = '0 0 auto';
+      btn.dataset.correct = (optIdx === item.correct);
+      btn.dataset.key = `u9-mcq-${i}`;
+      btn.dataset.value = String(optIdx);
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        optsWrap.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','correct','incorrect'));
+        btn.classList.add('selected');
+      });
+      optsWrap.appendChild(btn);
+    });
+    block.appendChild(optsWrap);
+    mcqEl.appendChild(block);
+  });
+  document.getElementById('u9-check-mcq').addEventListener('click', (e) => {
+    let correctCount = 0;
+    mcqEl.querySelectorAll('.choice-btn').forEach(btn => {
+      const isSelected = isChosenBtn(btn);
+      btn.classList.remove('selected');
+      if(btn.dataset.correct === 'true'){
+        btn.classList.add('correct');
+        if(isSelected) delete btn.dataset.revealed; else btn.dataset.revealed = '1';
+      }else if(isSelected) btn.classList.add('incorrect');
+      if(isSelected && btn.dataset.correct === 'true') correctCount++;
+    });
+    renderScore(e.currentTarget, correctCount, mcqData.length);
+  });
+
+  // --- 05) Complete the sentences ---
+  const fillBank = ["executive", "deficit", "forecasting", "just-in-time", "countermeasures", "punitive", "subsidies", "sentiment"];
+  const fillData = [
+    { before: "The tariffs were announced in an", after: "order.", answer: "executive" },
+    { before: "The aim was to reduce the US trade", after: ".", answer: "deficit" },
+    { before: "Tariffs have disrupted demand", after: "and inventory planning.", answer: "forecasting" },
+    { before: "Unpredictability undermines", after: "ordering, so firms are rethinking lean inventory.", answer: "just-in-time" },
+    { before: "China’s commerce ministry vowed", after: "to protect its interests.", answer: "countermeasures" },
+    { before: "Critics warned that", after: "duties could coerce partners and damage trust in the system.", answer: "punitive" },
+    { before: "Many countries are frustrated by the WTO’s inability to control state", after: ".", answer: "subsidies" },
+    { before: "JPMorgan said the shock to investor", after: "and capital flows will likely last.", answer: "sentiment" }
+  ];
+  const fillEl = document.getElementById('u9-fill');
+  const fillOptionsHtml = fillBank.map(w => `<option value="${w}">${w}</option>`).join('');
+  fillData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'fill-row';
+    row.innerHTML = `
+      <span class="fill-num">${i+1}.</span>
+      <span>${item.before}
+        <select class="inline-select" data-answer="${item.answer}" data-key="u9-fill-${i}">
+          <option value="">...</option>
+          ${fillOptionsHtml}
+        </select>
+        ${item.after}
+      </span>
+    `;
+    fillEl.appendChild(row);
+  });
+  wireSelectCheck('u9-check-fill', fillEl);
+
+  // --- 06) Vocabulary ---
+  const vocabDefs = [
+    "Taxes on goods that enter a country",
+    "When a country imports more than it exports",
+    "The price of the materials used to make a product",
+    "The time between ordering something and receiving it",
+    "A strong negative reaction from many people",
+    "Changing quickly and unpredictably",
+    "To weaken or damage something gradually",
+    "Limiting trade to protect local businesses"
+  ];
+  const vocabEl = buildSelectRows('u9-vocab', 'u9-vocab', [
+    { term: "Tariffs", answer: vocabDefs[0] },
+    { term: "Trade deficit", answer: vocabDefs[1] },
+    { term: "Input cost", answer: vocabDefs[2] },
+    { term: "Lead time", answer: vocabDefs[3] },
+    { term: "Backlash", answer: vocabDefs[4] },
+    { term: "Volatile", answer: vocabDefs[5] },
+    { term: "To undermine", answer: vocabDefs[6] },
+    { term: "Protectionism", answer: vocabDefs[7] }
+  ], vocabDefs, 170);
+  wireSelectCheck('u9-check-vocab', vocabEl);
+
+  // --- 07) Word partnerships ---
+  const collocBank = ["deficit", "time", "chain", "cost", "subsidies", "market", "forecasting", "order"];
+  const collocEl = buildSelectRows('u9-colloc', 'u9-colloc', [
+    { term: "trade …", answer: "deficit" },
+    { term: "lead …", answer: "time" },
+    { term: "supply …", answer: "chain" },
+    { term: "input …", answer: "cost" },
+    { term: "state …", answer: "subsidies" },
+    { term: "emerging …", answer: "market" },
+    { term: "demand …", answer: "forecasting" },
+    { term: "executive …", answer: "order" }
+  ], collocBank, 170);
+  wireSelectCheck('u9-check-colloc', collocEl);
+
+  // --- 08) Discussion ---
+  renderManifest('u9-discussion', [
+    { q: "The report says unpredictability is hurting supply chains more than the tariff rates themselves. Do you agree? Why?" },
+    { q: "How could a company make its supply chain more resilient to sudden trade-policy changes (suppliers, inventory, routes, contracts)?" },
+    { q: "The report mentions that some countries may respond with countermeasures. How could that affect your own market or customers?" },
+    { q: "If lead times get longer and costs rise, what would you communicate first to your customers or your internal team? How would you say it in English?" }
+  ]);
+
+  // --- Save / load answers (localStorage + Google Sheets, autosave) ---
+  const STORAGE_KEY = 'michel-unit9-answers';
+  const statusEl = document.getElementById('u9-save-status');
+  function setStatus(msg){
+    statusEl.textContent = msg;
+    setTimeout(() => { if(statusEl.textContent === msg) statusEl.textContent = 'Answers save automatically'; }, 3500);
+  }
+
+  function saveAnswers(){
+    const state = { notes: {}, choices: {}, selects: {} };
+    document.querySelectorAll('#view-unit9 textarea[data-key]').forEach(t => {
+      if(t.value.trim()) state.notes[t.dataset.key] = t.value;
+    });
+    document.querySelectorAll('#view-unit9 .choice-btn[data-key]').forEach(btn => {
+      if(isChosenBtn(btn)){
+        state.choices[btn.dataset.key] = (btn.dataset.value !== undefined) ? btn.dataset.value : true;
+      }
+    });
+    document.querySelectorAll('#view-unit9 select[data-key]').forEach(sel => {
+      if(sel.value) state.selects[sel.dataset.key] = sel.value;
+    });
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+    remoteSave(STORAGE_KEY, state);
+    updateMenuStatus(9, 'view-unit9');
+    setStatus('✓ Saved');
+  }
+
+  async function loadAnswers(){
+    try{
+      let state = await remoteLoad(STORAGE_KEY);
+      if(state){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(err){}
+      }else{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        state = JSON.parse(raw);
+      }
+      Object.entries(state.notes || {}).forEach(([key, val]) => {
+        const t = document.querySelector(`#view-unit9 textarea[data-key="${key}"]`);
+        if(t){
+          t.value = val;
+          t.classList.add('show');
+          const btn = t.parentElement.querySelector('.q-toggle');
+          if(btn) btn.textContent = '− Notes';
+        }
+      });
+      Object.entries(state.choices || {}).forEach(([key, val]) => {
+        const b = (val !== true)
+          ? document.querySelector(`#view-unit9 .choice-btn[data-key="${key}"][data-value="${val}"]`)
+          : document.querySelector(`#view-unit9 .choice-btn[data-key="${key}"]`);
+        if(b) b.classList.add('selected');
+      });
+      Object.entries(state.selects || {}).forEach(([key, val]) => {
+        const s = document.querySelector(`#view-unit9 select[data-key="${key}"]`);
+        if(s) s.value = val;
+      });
+      autoCheckAnswered('view-unit9');
+      updateMenuStatus(9, 'view-unit9');
+      setStatus('Loaded your saved answers');
+    }catch(err){
+      // Nothing saved yet, or storage unavailable.
+    }
+  }
+
+  document.getElementById('u9-clear-answers').addEventListener('click', () => {
+    try{
+      localStorage.removeItem(STORAGE_KEY);
+      setStatus('Saved answers cleared');
+    }catch(err){
+      setStatus('Nothing to clear');
+    }
+  });
+
+  const u9Root = document.getElementById('view-unit9');
+  const u9DebouncedSave = debounce(saveAnswers, 700);
+  u9Root.addEventListener('input', (e) => {
+    if(e.target.matches('textarea.notes')) u9DebouncedSave();
+  });
+  u9Root.addEventListener('change', (e) => {
+    if(e.target.matches('select.inline-select')) saveAnswers();
+  });
+  u9Root.addEventListener('click', (e) => {
+    if(e.target.closest('.choice-btn') || e.target.closest('.check-btn')) u9DebouncedSave();
   });
 
   loadAnswers();
